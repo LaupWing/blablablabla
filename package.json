@@ -1,0 +1,30 @@
+{
+  "name": "linernote3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "http": "0.0.0",
+    "node-fetch": "^2.6.0",
+    "puppeteer": "^1.17.0",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0",
+    "socket.io": "^2.2.0",
+    "twitter": "^1.7.1",
+    "youtube-node": "^1.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
