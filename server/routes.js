@@ -8,19 +8,23 @@ router.get('/', (req, res)=>{
 
 router.get('/index', (req, res)=>{
     res.render('index',{
-        currentPage: 'partials/following.ejs'
+        currentPage: 'partials/following.ejs',
     })
 })
 
 router.get('/search', (req, res)=>{
     res.render('index',{
-        currentPage: 'partials/search.ejs'
+        currentPage: 'partials/search.ejs',
+        data: null
     })
 })
-router.post('/search', async (req,res)=>{
+router.post('/search/result', async (req,res)=>{
     const searchVal = req.body.search
 	const acces_token = req.session.acces_token
     const artist = await spotifyApi(searchVal, acces_token)
-    res.send(artist)
+    res.render('partials/results',{
+        currentPage: 'partials/search.ejs',
+        data: 'iets'
+    })
 })
 module.exports = router

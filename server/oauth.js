@@ -3,7 +3,6 @@ const request       = require('request')
 const querystring   = require('querystring')
 const router        = express.Router()
 require("dotenv/config")
-console.log('using oauth')
 
 let redirect_uri =
   process.env.REDIRECT_URI ||
