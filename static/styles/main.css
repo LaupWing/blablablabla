@@ -24,7 +24,6 @@
 
 body {
   width: 100vw;
-  height: 100vh;
   background: var(--main-bg-color);
   font-size: 12px;
   font-family: sans-serif;

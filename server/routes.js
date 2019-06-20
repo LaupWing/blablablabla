@@ -1,5 +1,6 @@
 const express = require('express')
 const router  = express.Router()
+const {spotifyApi} = require('./api.js')
 
 router.get('/', (req, res)=>{
     res.render('login')
@@ -16,5 +17,10 @@ router.get('/search', (req, res)=>{
         currentPage: 'partials/search.ejs'
     })
 })
-
+router.post('/search', async (req,res)=>{
+    const searchVal = req.body.search
+	const acces_token = req.session.acces_token
+    const artist = await spotifyApi(searchVal, acces_token)
+    res.send(artist)
+})
 module.exports = router
