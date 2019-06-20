@@ -1,11 +1,8 @@
 <%- include partials/head.ejs %>
 <body>
-    <div class="following">
-        <h2>Following</h2>
-        <div class="addNew">
-            <i class="fas fa-plus"></i>
-        </div>
-    </div>
+    <main>
+        <%- include(currentPage) %>
+    </main>
     <% include partials/nav.ejs %>
 </body>
 </html>

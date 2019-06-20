@@ -28,3 +28,7 @@ nav#nav .mainNav-item svg{
 nav#nav .mainNav-item svg > path{
     fill: white;
 }
+
+nav#nav .mainNav-item svg.active{
+    opacity: 1;
+}
