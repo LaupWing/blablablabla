@@ -9,7 +9,7 @@ router.get('/', (req, res)=>{
 
 router.get('/index', (req, res)=>{
     res.render('index',{
-        stylingPath: ''
+        stylingPath: '/styles/index.css'
     })
 })
 

@@ -1,0 +1,21 @@
+.following{
+    margin-top: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.following .addNew{
+    background: var(--second-bg-color);
+    width: 80px;
+    height: 80px;
+    color: white;
+    font-size: 20px;
+    font-weight: lighter;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 50%;
+}

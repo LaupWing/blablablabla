@@ -1,7 +1,7 @@
 :root{
     --main-bg-color: #171717;
     --gradient: linear-gradient(rgba(200,200,200,0), #171717);
-    --second-bg-color: #313131;
+    --second-bg-color: #3E3E3E;
     --main-font-color: white;
     --color-dark: #000;
     --color-btn: #fff;
@@ -63,14 +63,7 @@ h2 {
   color: mediumseagreen;
   border-color: mediumseagreen;
 }
-/* end btns*/
 
-
-/* Login 
------------------------------- */
-
-/* SEARCH PAGE 
-------------------------------*/
 .search-main {
   padding: 1rem;
 }
