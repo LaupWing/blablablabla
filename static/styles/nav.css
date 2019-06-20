@@ -1,0 +1,30 @@
+.mainNav-list {
+    background: var(--second-bg-color);
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.mainNav-item {
+    width: inherit;
+    text-align: center;
+    padding: 1rem 1.4rem;
+}
+
+.mainNav-item:hover, .mainNav-item:focus {
+    background-color: var(--color-btn-hover);
+}
+
+nav#nav .mainNav-item svg{
+    width: 2rem;
+    background: transparent;
+    height: 100%;
+    opacity: .3;
+    transition: .25s;
+}
+
+nav#nav .mainNav-item svg > path{
+    fill: white;
+}

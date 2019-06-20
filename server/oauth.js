@@ -3,11 +3,11 @@ const request       = require('request')
 const querystring   = require('querystring')
 const router        = express.Router()
 require("dotenv/config")
-
+console.log('using oauth')
 
 let redirect_uri =
   process.env.REDIRECT_URI ||
-  'http://localhost:3000/spotify/callback'
+  'http://localhost:3001/spotify/callback'
 
 router.get('/spotify/login', function(req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -37,7 +37,7 @@ router.get('/spotify/callback', function(req, res) {
   }
   request.post(authOptions, function(error, response, body) {
     var access_token = body.access_token
-    let uri = process.env.FRONTEND_URI || 'http://localhost:3000/home'
+    let uri = process.env.FRONTEND_URI || 'http://localhost:3001/index'
     req.session.acces_token = access_token
     res.redirect(uri)
   })
