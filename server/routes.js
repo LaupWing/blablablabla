@@ -7,6 +7,11 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/index', (req, res)=>{
+    const io = req.app.get('socketio')
+    io.on('connection', socket=>{
+        socket.on('sending searchvalue',(value)=> console.log(value))
+        console.log(`User connnect with id ${socket.id}`)
+    })
     res.render('index',{
         currentPage: 'partials/following.ejs',
     })
