@@ -11,13 +11,11 @@
     outline: none;
     padding: .75rem;
     padding-left: 1rem;
-    width: 70%;
-    border-radius: 40px 0px 0 40px;
+    width: 90%;
+    margin: auto;
+    border-radius: 40px;
     border: none;
     display: block;
-}
-.search-bar .btn.btn-save,
-#search{
     padding-top: .5rem;
     padding-bottom: .5rem;
 }
