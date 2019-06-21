@@ -12,11 +12,12 @@ router.get('/index', (req, res)=>{
     })
 })
 
+router.get('/home', (req, res)=>{
+    res.render('partials/following')
+})
+
 router.get('/search', (req, res)=>{
-    res.render('index',{
-        currentPage: 'partials/search.ejs',
-        data: null
-    })
+    res.render('partials/search.ejs')
 })
 router.post('/search/result', async (req,res)=>{
     const searchVal = req.body.search

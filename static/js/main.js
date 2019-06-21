@@ -4,10 +4,58 @@ function init(){
 }
 
 function addingEvents(){
-    const form = document.querySelector('.search-bar')
-    if(form === undefined)  return
+    const form  = document.querySelector('.search-bar')
+    const links = document.querySelectorAll('nav#nav a')
+    links.forEach(link=>{
+        link.addEventListener('click', goToAnotherPage)
+    })
+    if(form === null)  return
     searching()
 }
+
+function goToAnotherPage(){
+    event.preventDefault()
+    const url = this.href
+    const main = document.querySelector('main')
+    main.classList.add('fadeAway')
+    turnOffLink(true)
+    main.addEventListener('transitionend', ()=>{
+        console.log(event)
+        if(event.propertyName === 'opacity'){   
+            getElement(url, main)
+        }
+    })
+}
+function getElement(href, container){
+    console.log(href)
+    if(href === 'javascript:void(0);')   return
+    fetch(href)
+        .then(data=>data.text())
+        .then(body=>{
+            while(container.firstChild){
+                container.removeChild(container.firstChild)
+            }
+            container.classList.remove('fadeAway')
+            container.insertAdjacentHTML('beforeend',body)
+            turnOffLink(false)
+        })
+}
+
+function turnOffLink(disable){
+    const links = document.querySelectorAll('nav#nav a')
+    links.forEach((link,index)=>{
+        if(disable){
+            link.href="javascript:void(0);"
+        }
+        else{
+            if(index===0)      link.href="/home"
+            else if(index===1) link.href="/search"
+            else if(index===2) link.href="/info"
+        }
+    })
+
+}
+
 
 
 function searching(){

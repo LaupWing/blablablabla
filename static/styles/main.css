@@ -28,6 +28,9 @@ body {
   font-size: 12px;
   font-family: sans-serif;
 }
+main{
+    transition: .5s;
+}
 
 h2 {
   font-size: 1.5rem;

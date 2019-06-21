@@ -1,0 +1,12 @@
+main.fadeAway{
+    transform: translate(0,-50%);  
+    opacity: 0;
+    /* animation: fadeAway forwards 1s; */
+}
+
+/* @keyframes fadeAway{
+    to{
+        opacity: 0;
+        transform: translate(0, -50%);
+    }
+} */
