@@ -85,10 +85,23 @@ function getElement(href){
             }
             turnOffLink(false)
             if(document.querySelector('header.artist-header')!==null){
+                instgrm.Embeds.process()
                 document.querySelector('main').classList.add("artist-page")
                 addingEvents(document.querySelectorAll('li.related-item a'))
+                soundCloudEmbeds()
             }
         })
+}
+
+function soundCloudEmbeds(){
+    const allEmbeds = document.querySelectorAll('.putTheWidgetHere')
+    if(allEmbeds.length===0)    return
+    allEmbeds.forEach((embed,i)=>{
+        const url = embed.getAttribute('data-url')
+        SC.oEmbed(url, {
+            element: document.querySelector(`.putTheWidgetHere#id${i}`)
+        });
+    })
 }
 
 function turnOffLink(disable){

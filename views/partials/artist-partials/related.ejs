@@ -1,7 +1,7 @@
 <ul class="related-list">
     <% related.artists.forEach((artist)=> { %>
       <li class="related-item"><a href="/artist/<%= artist.id %>">
-        <% if(artist.images.length>0){ %>
+        <% if(artist.images){ %>
             <div class="related-item-img">
                 <img src="<%= artist.images[0].url %>">
             </div>
