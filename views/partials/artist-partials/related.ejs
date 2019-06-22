@@ -2,9 +2,13 @@
     <% related.artists.forEach((artist)=> { %>
       <li class="related-item"><a href="/artist/<%= artist.id %>">
         <% if(artist.images.length>0){ %>
-            <img class="related-item-img" src="<%= artist.images[0].url %>">
+            <div class="related-item-img">
+                <img src="<%= artist.images[0].url %>">
+            </div>
         <% } else{ %>
-            <img class="related-item-img" src="/img/placeholder.png">
+            <div class="related-item-img">
+                <img src="/img/placeholder.png">
+            </div>	
         <% } %>
         <h4 class="related-item-name"><%= artist.name %></h4></a>
     </li>

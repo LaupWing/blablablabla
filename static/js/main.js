@@ -78,13 +78,14 @@ function getElement(href){
             while(container.firstChild){
                 container.removeChild(container.firstChild)
             }
-            container.classList.remove('fadeAway')
             container.insertAdjacentHTML('beforeend',body)
+            container.classList.remove('fadeAway')
             if(url === 'http://localhost:3001/search'){
                 getSearchResults()
             }
             turnOffLink(false)
             if(document.querySelector('header.artist-header')!==null){
+                document.querySelector('main').classList.add("artist-page")
                 addingEvents(document.querySelectorAll('li.related-item a'))
             }
         })
@@ -123,7 +124,7 @@ function submitting(){
 }
 
 
-function activeNav(){
+function activeNav(href){
     const navItems = document.querySelectorAll('nav#nav svg')
     navItems.forEach(item=>{
         if(window.location.pathname==='/index' && item.id ==='nav-home'){

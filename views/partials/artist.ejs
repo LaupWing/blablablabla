@@ -3,28 +3,43 @@
     <div class="click-left-overlay"></div>
     <div class="click-right-overlay"></div>
     <div class="artist-profile-image">
-      <div 
-        class="image-container"
-        style=" background:
-                linear-gradient(
-                rgba(0, 0, 0, 0.45), 
-                rgba(0, 0, 0, 0.45)
-                ),
-                  url(<%=artist.images[0].url%>);
-                background-size: cover;
-        "
-      >
-      </div>
-      <div class="header-section info">
-        <h1 class="artist-title"><%= artist.name %></h1>
-        <a class="btn btn-follow" href="#">follow</a>
-      </div>
-      <nav class="header">
-        <i class="fas fa-circle"></i>
-        <i class="fas fa-circle"></i>
-        <i class="fas fa-circle"></i>
-      </nav>
-      <div class="bottom-shadow"></div>
+        <% if(artist.images.length>0){ %>
+            <div 
+                class="image-container"
+                style=" background:
+                        linear-gradient(
+                        rgba(0, 0, 0, 0.45), 
+                        rgba(0, 0, 0, 0.45)
+                        ),
+                        url(<%=artist.images[0].url%>);
+                        background-size: cover;
+                "
+            >
+            </div>
+        <%} else{ %>
+            <div 
+                class="image-container"
+                style=" background:
+                        linear-gradient(
+                        rgba(0, 0, 0, 0.45), 
+                        rgba(0, 0, 0, 0.45)
+                        ),
+                        url(/img/placeholder.png);
+                        background-size: cover;
+                "
+            >
+            </div>
+        <% }%>
+        <div class="header-section info">
+            <h1 class="artist-title"><%= artist.name %></h1>
+            <a class="btn btn-follow" href="#">follow</a>
+        </div>
+        <nav class="header">
+            <i class="fas fa-circle"></i>
+            <i class="fas fa-circle"></i>
+            <i class="fas fa-circle"></i>
+        </nav>
+        <div class="bottom-shadow"></div>
     </div>
   </header>
   <section>

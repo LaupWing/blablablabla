@@ -36,7 +36,6 @@ router.get('/artist/:id', async(req,res)=>{
     const artist    = await spotifyApi.artist(id, acces_token)
     const related   = await spotifyApi.related(id, acces_token)
     const topTracks = await spotifyApi.topTracks(id, acces_token)
-    console.log(topTracks)
     res.render('partials/artist',{
         artist,
         related,
