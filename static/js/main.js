@@ -84,6 +84,9 @@ function getElement(href){
                 getSearchResults()
             }
             turnOffLink(false)
+            if(document.querySelector('header.artist-header')!==null){
+                addingEvents(document.querySelectorAll('li.related-item a'))
+            }
         })
 }
 
@@ -134,4 +137,6 @@ function activeNav(){
         }
     })
 }
+
+
 window.addEventListener('load', init)

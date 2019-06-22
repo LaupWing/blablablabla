@@ -19,26 +19,6 @@
         <h1 class="artist-title"><%= artist.name %></h1>
         <a class="btn btn-follow" href="#">follow</a>
       </div>
-      <div class="header-section top-tracks-container">
-        <h2>Populair Tracks</h2>
-        <ul>
-          <% topTracks.forEach((tp,index)=>{ %>
-            <li>
-              <p class="index"><%=index+1%>.</p>
-              <p class="song"><%=tp.name%></p>
-              <div class="moreInfo">
-                <i class="fas fa-circle"></i>
-                <i class="fas fa-circle"></i>
-                <i class="fas fa-circle"></i>
-              </div>
-            </li>
-          <% }) %> 
-          
-        </ul>
-      </div>
-      <div class="header-section bio">
-          <p><%=wikiData%></p>
-      </div>
       <nav class="header">
         <i class="fas fa-circle"></i>
         <i class="fas fa-circle"></i>
@@ -51,7 +31,7 @@
     <ul class="artist-header-list">
       <li class="related-artists">
         <h2 class="padding related-title">Fans also like</h2>
-        <% include partials/related.ejs %>
+        <% include artist-partials/related.ejs %>
       </li>
     </ul>
   </section>

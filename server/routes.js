@@ -32,10 +32,16 @@ router.get('/search', (req, res)=>{
 router.get('/artist/:id', async(req,res)=>{
     const id = req.params.id
     const acces_token = req.session.acces_token
-    console.log(id)
-    const artist = await spotifyApi.artist(id, acces_token)
-    console.log(artist)
-    res.send(artist)
+    
+    const artist    = await spotifyApi.artist(id, acces_token)
+    const related   = await spotifyApi.related(id, acces_token)
+    const topTracks = await spotifyApi.topTracks(id, acces_token)
+    console.log(topTracks)
+    res.render('partials/artist',{
+        artist,
+        related,
+        topTracks
+    })
 })
 
 module.exports = router
