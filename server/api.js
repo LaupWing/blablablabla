@@ -1,6 +1,6 @@
 const fetch = require("node-fetch")
 
-function getDataWithToken({acces_token, url}){
+function getDataWithToken({url,acces_token}){
     return fetch(url,
     {
         headers:
@@ -17,13 +17,45 @@ function getData(url){
 }
 
 
-const spotifyApi = async (name, acces_token)=>{
-    const config = {
-        url: `https://api.spotify.com/v1/search?q=${name}&type=artist&limit=5&offset=0`,
-        acces_token
+// const spotifyApi = async (name, acces_token)=>{
+//     const config = {
+//         url: `https://api.spotify.com/v1/search?q=${name}&type=artist&limit=5&offset=0`,
+//         acces_token
+//     }
+//     const artist = await getDataWithToken(config)
+//     return artist
+// }
+
+
+const spotifyApi ={
+    search: (name, acces_token) =>{
+        const config = {
+            url: `https://api.spotify.com/v1/search?q=${name}&type=artist&limit=5&offset=0`,
+            acces_token
+        }
+        return getDataWithToken(config)
+    },
+    artist: (id, acces_token)=>{
+        const config = {
+            url: `https://api.spotify.com/v1/artists/${id}`,
+            acces_token
+        }
+        return getDataWithToken(config)
+    },
+    related: (id, acces_token) =>{
+        const config= {
+            url: `https://api.spotify.com/v1/artists/${id}/related-artists`,
+            acces_token
+        }
+        return getDataWithToken(config)
+    },
+    topTracks: (id, acces_token) =>{
+        const config = {
+            url: `https://api.spotify.com/v1/artists/${id}/top-tracks?country=NL`,
+            acces_token
+        }
+        return getDataWithToken(config)
     }
-    const artist = await getDataWithToken(config)
-    return artist
 }
 
 

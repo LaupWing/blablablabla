@@ -1,3 +1,6 @@
+.search-main {
+    padding: 1rem;
+}
 .search-bar {
     display: flex;
     margin: 15px;
@@ -30,6 +33,14 @@
     margin: 1rem;
     margin-left: 0;
     width: 80%;
+    max-height: 0;
+    animation: heightAnim 2s forwards;
+}
+
+@keyframes heightAnim{
+    to{
+        max-height: 300px;
+    }
 }
 
 .result-link {

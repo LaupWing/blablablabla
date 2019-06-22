@@ -1,13 +1,42 @@
 const socket = io()
 let url = null
 
+socket.on('sending artistinfo', (data)=>{
+    renderResults(data)
+})
+
 function init(){
     activeNav()
-    addingEvents()
+    addingEvents(document.querySelectorAll('nav#nav a'))
 }
 
-function addingEvents(){
-    const links = document.querySelectorAll('nav#nav a')
+
+function renderResults(data){
+    const container = document.querySelector('section.search-main')
+    removeChilds(container)
+    data.items.forEach(item=>{
+        const img = (item.images.length >0) ? item.images[0].url : '/img/placeholder.png' 
+        const newElement =`
+        <div data-id="${item.name}" class="result-item">
+            <a class="result-link" href="/artist/${item.id}">
+            <img class="result-img" src="${img}" alt="">
+            <p class="result-name">${item.name}</p>
+            </a>
+        </div>
+        `
+        container.insertAdjacentHTML('beforeend', newElement)
+    })
+    addingEvents(document.querySelectorAll('main a'))
+}
+
+function removeChilds(container){
+    while(container.firstChild){
+        container.removeChild(container.firstChild)
+    }
+}
+
+
+function addingEvents(links){
     links.forEach(link=>{
         link.addEventListener('click', goToAnotherPage)
     })
@@ -32,19 +61,15 @@ function transitionBridge(){
 
 function getSearchResults(){
     const input = document.querySelector('#search')
-    const form = input.parentElement
     input.addEventListener('keyup', function(){
         if(this.value.length >3){
             socket.emit('sending searchvalue', this.value)
-            // form.addEventListener('submit',()=>event.preventDefault())
-            // form.submit()
         }
     })
 }
 
 
 function getElement(href){
-    console.log(href)
     const container = document.querySelector('main')
     if(href === 'javascript:void(0);')   return
     fetch(href)
@@ -94,9 +119,6 @@ function submitting(){
     }
 }
 
-function renderResults(){
-    fetch()
-}
 
 function activeNav(){
     const navItems = document.querySelectorAll('nav#nav svg')

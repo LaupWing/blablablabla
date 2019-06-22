@@ -1,0 +1,59 @@
+<header class="artist-header">
+    <i class="fas fa-chevron-left"></i>
+    <div class="click-left-overlay"></div>
+    <div class="click-right-overlay"></div>
+    <div class="artist-profile-image">
+      <div 
+        class="image-container"
+        style=" background:
+                linear-gradient(
+                rgba(0, 0, 0, 0.45), 
+                rgba(0, 0, 0, 0.45)
+                ),
+                  url(<%=artist.images[0].url%>);
+                background-size: cover;
+        "
+      >
+      </div>
+      <div class="header-section info">
+        <h1 class="artist-title"><%= artist.name %></h1>
+        <a class="btn btn-follow" href="#">follow</a>
+      </div>
+      <div class="header-section top-tracks-container">
+        <h2>Populair Tracks</h2>
+        <ul>
+          <% topTracks.forEach((tp,index)=>{ %>
+            <li>
+              <p class="index"><%=index+1%>.</p>
+              <p class="song"><%=tp.name%></p>
+              <div class="moreInfo">
+                <i class="fas fa-circle"></i>
+                <i class="fas fa-circle"></i>
+                <i class="fas fa-circle"></i>
+              </div>
+            </li>
+          <% }) %> 
+          
+        </ul>
+      </div>
+      <div class="header-section bio">
+          <p><%=wikiData%></p>
+      </div>
+      <nav class="header">
+        <i class="fas fa-circle"></i>
+        <i class="fas fa-circle"></i>
+        <i class="fas fa-circle"></i>
+      </nav>
+      <div class="bottom-shadow"></div>
+    </div>
+  </header>
+  <section>
+    <ul class="artist-header-list">
+      <li class="related-artists">
+        <h2 class="padding related-title">Fans also like</h2>
+        <% include partials/related.ejs %>
+      </li>
+    </ul>
+  </section>
+  <section id="feed">
+  </section>

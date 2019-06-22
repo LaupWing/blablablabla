@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const http       = require('http').Server(app)
 const io         = require('socket.io')(http)
 require('dotenv').config()
-const port = 3001
+const port       = 3001
 
 app
     .set('view engine', 'ejs')
