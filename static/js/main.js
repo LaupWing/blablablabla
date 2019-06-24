@@ -149,19 +149,15 @@ function submitting(){
 }
 
 
-function activeNav(href){
-    const navItems = document.querySelectorAll('nav#nav svg')
+function activeNav(){
+    const navItems = document.querySelectorAll('.mainNav-item a')
     navItems.forEach(item=>{
-        if(window.location.pathname==='/index' && item.id ==='nav-home'){
-            item.classList.add('active')
-        }
-        else if(window.location.pathname==='/search' && item.id ==='nav-search'){
-            item.classList.add('active')
-        }
-        else if(window.location.pathname==='/info' && item.id ==='nav-info'){
-            item.classList.add('active')
-        }
+        item.addEventListener('click', function(){
+            navItems.forEach(item=>item.classList.remove('active'))
+            this.classList.add('active')
+        })
     })
+    navItems[0].classList.add('active')
 }
 
 
