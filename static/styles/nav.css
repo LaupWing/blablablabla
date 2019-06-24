@@ -11,10 +11,7 @@
     width: inherit;
     text-align: center;
     padding: 1rem 1.4rem;
-}
-
-.mainNav-item:hover, .mainNav-item:focus {
-    background-color: var(--color-btn-hover);
+    outline: none;
 }
 
 nav#nav .mainNav-item svg{

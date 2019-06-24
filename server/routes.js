@@ -4,9 +4,8 @@ const {spotifyApi} = require('./api.js')
 const {instagram} = require('./api.js')
 const {soundCloud} = require('./api.js')
 let artistName   = null
-
-
 const Youtube = require('youtube-node')
+
 router.get('/', (req, res)=>{
     res.render('login')
 })
