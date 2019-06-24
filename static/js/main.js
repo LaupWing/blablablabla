@@ -5,6 +5,7 @@ socket.on('sending artistinfo', (data)=>{
     renderResults(data)
 })
 
+
 function init(){
     activeNav()
     addingEvents(document.querySelectorAll('nav#nav a'))
@@ -85,11 +86,22 @@ function getElement(href){
             }
             turnOffLink(false)
             if(document.querySelector('header.artist-header')!==null){
-                instgrm.Embeds.process()
                 document.querySelector('main').classList.add("artist-page")
                 addingEvents(document.querySelectorAll('li.related-item a'))
+                console.log(document.querySelector('header .header-section.info h1').textContent)
+                // socket.emit('requesting posts', document.querySelector('header'))
+                requestingPosts()
+                instgrm.Embeds.process()
                 soundCloudEmbeds()
             }
+        })
+}
+
+function requestingPosts(){
+    fetch('http://localhost:3001/feed')
+        .then(data=>data.text())
+        .then(feed=>{
+            document.querySelector('section#feed').innerHTML = feed
         })
 }
 

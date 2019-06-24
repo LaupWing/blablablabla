@@ -1,4 +1,7 @@
-<header class="artist-header">
+<header 
+    class="artist-header"
+    data-id="<%=artist.id%>"
+>
     <i class="fas fa-chevron-left"></i>
     <div class="click-left-overlay"></div>
     <div class="click-right-overlay"></div>
@@ -49,4 +52,12 @@
         <% include artist-partials/related.ejs %>
       </li>
     </ul>
+  </section>
+  <section id="feed">
+      <div class="loading">
+          <p>
+              Loading in posts
+          </p>
+          <img src="/img/loading.svg" alt="">
+      </div>
   </section>
