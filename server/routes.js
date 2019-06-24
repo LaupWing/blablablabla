@@ -45,9 +45,14 @@ router.get('/artist/:id', async(req,res)=>{
     const artist     = await spotifyApi.artist(id, acces_token)
     const related    = await spotifyApi.related(id, acces_token)
     const topTracks  = await spotifyApi.topTracks(id, acces_token)
-    const insta      = await instagram(artist.name)
-    const soundcloud = await soundCloud(artist.name)
-    console.log(soundcloud)
+    // const insta      = await instagram(artist.name)
+    // const soundcloud = await soundCloud(artist.name)
+    
+    res.render('partials/artist',{
+        artist,
+        related,
+        topTracks
+    })
     const yt = new Youtube()
 	yt.setKey("AIzaSyBeiiNR-feYHP2uC90LKZWVFlGx7IQ9ztE")
 	yt.search(artist.name,10,(err,response) => {
@@ -60,15 +65,13 @@ router.get('/artist/:id', async(req,res)=>{
                 }
             })
 
-        res.render('partials/artist',{
-            artist,
-            related,
-            topTracks,
-            youtube,
-            insta,
-            soundcloud
-        })
 	});
 })
+
+router.get('/artist/feed', async (req,res)=>{
+
+})
+
+
 
 module.exports = router

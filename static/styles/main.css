@@ -48,10 +48,6 @@ h2 {
   padding: .2rem .85rem;
 }
 
-.btn:hover, .btn:focus {
-  color: var(--color-btn-hover);
-  border: solid 1px var(--color-btn-hover);
-}
 
 .btn-save {
   background: none;
@@ -167,7 +163,7 @@ h2 {
 }
 
 .albums-item:hover .albums-name, .albums-item:hover .albums-followers, .albums-item:focus .albums-name, .albums-item:focus .albums-followers {
-  color: var(--color-btn-hover);
+  /* color: var(--color-btn-hover); */
 }
 
 .albums-item:hover .albums-item-img {
