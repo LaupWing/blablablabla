@@ -66,10 +66,12 @@ const wikipedia = async(name)=>{
     try{
         const allLinks  = await musicBrainz.artistLinks(removeAllNonAlpha(name))
         const getLink = allLinks.filter(searchObj('wikipedia'))
-        const wikiLink  = (getLink.length===0) ? `https://en.wikipedia.org/api/rest_v1/page/summary/${name}` : allLinks.filter(searchObj('wikipedia'))[0].urlrsc
-        // console.log(wikiLink)
+        const hardCodedLink = `https://en.wikipedia.org/api/rest_v1/page/summary/${name}`
+
+        const wikiLink  = (getLink.length===0) ? hardCodedLink : `https://en.wikipedia.org/api/rest_v1/page/summary/${getLink[0].urlrsc.split('https://en.wikipedia.org/wiki/')[1]}`
+
         const data = await getData(`${wikiLink}`)
-        return data
+        return data.extract
     }catch{
         console.log('error wikipedia data isnt loading')
     }

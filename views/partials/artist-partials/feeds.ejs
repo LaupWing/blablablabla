@@ -17,4 +17,7 @@
         </div>
     <% }) %>
 <% } %>
-  
+<% youtube.forEach((url)=>{ %>
+    <iframe src="https://www.youtube.com/embed/<%=url%>">
+    </iframe>
+  <% }) %>

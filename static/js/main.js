@@ -7,7 +7,9 @@ socket.on('change artistpage', (obj)=>renderArtistPage(obj))
 
 function init(){
     activeNav()
-    addingEvents(document.querySelectorAll('nav#nav a'))
+    const links = Array.from(document.querySelectorAll('nav#nav a'))
+    links.push(document.querySelector('.addNew a'))
+    addingEvents(links)
 }
 
 
@@ -45,6 +47,7 @@ function addingEvents(links){
 
 function goToAnotherPage(){
     event.preventDefault()
+    if(this.href === 'javascript:void(0);')   return
     prevState.push(url)
     url = this.href
     const main = document.querySelector('main')
@@ -83,14 +86,17 @@ function getElement(href){
             container.insertAdjacentHTML('beforeend',body)
             container.classList.remove('fadeAway')
             if(document.querySelector('input#search')){
+                console.log('adding search ')
                 getSearchResults()
+            }
+            if(document.querySelector('.addNew a')){
+                addingEvents(document.querySelectorAll('.addNew a'))
             }
             turnOffLink(false)
             if(document.querySelector('header.artist-header')!==null){
                 document.querySelector('main').classList.add("artist-page")
                 document.querySelector('i.fas.fa-chevron-left').addEventListener('click', getPrevState)
                 addingEvents(document.querySelectorAll('li.related-item a'))
-                // changeArtist(document.querySelectorAll('li.related-item a'))
                 requestingPosts()
             }
         })
