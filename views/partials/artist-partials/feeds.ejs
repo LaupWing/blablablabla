@@ -17,7 +17,12 @@
         </div>
     <% }) %>
 <% } %>
-<% youtube.forEach((url)=>{ %>
-    <iframe src="https://www.youtube.com/embed/<%=url%>">
-    </iframe>
+<% youtube.forEach((yt)=>{ %>
+    <div class="iframe-wrapper">
+        <header class="iframe">
+                <img src="/img/youtube.png" alt="">
+        </header>
+        <iframe src="https://www.youtube.com/embed/<%=yt.id%>">
+        </iframe>
+    </div>
   <% }) %>

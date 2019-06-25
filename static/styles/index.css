@@ -4,12 +4,17 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    color: white;
+}
+.following p{
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 500;
 }
 .following .addNew{
     background: var(--second-bg-color);
     width: 80px;
     height: 80px;
-    color: white;
     font-size: 20px;
     font-weight: lighter;
     display: flex;
@@ -18,4 +23,13 @@
     align-items: center;
     margin-top: 10px;
     border-radius: 50%;
+}
+.following .addNew a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.addNew img{
+    width: 25px;
 }

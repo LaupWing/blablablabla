@@ -14,6 +14,7 @@ function init(){
 
 
 function renderResults(data){
+    console.log('rendering results')
     const container = document.querySelector('section.search-main')
     removeChilds(container)
     if(data===null)     return
@@ -66,8 +67,21 @@ function transitionBridge(){
 
 function getSearchResults(){
     const input = document.querySelector('#search')
-    input.addEventListener('keyup', function(){
-        if(this.value.length >3){
+    const deleteInput = document.querySelector('.input-container i')
+    deleteInput.addEventListener('click', function(){
+        input.value = ''
+    })
+    input.addEventListener('input', function(){
+        if(input.value.length === 0){
+            const container = document.querySelector('section.search-main')
+            document.querySelector('.input-container i').classList.remove('reveal')
+            removeChilds(container)
+        }
+        else if(input.value.length > 0){
+            document.querySelector('.input-container i').classList.add('reveal')
+        }
+        if(input.value.length >3){
+            console.log("emitting search")
             socket.emit('sending searchvalue', this.value)
         }
     })

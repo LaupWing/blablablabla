@@ -18,6 +18,7 @@ router.get('/index', (req, res)=>{
     const io = req.app.get('socketio')
     io.on('connection', socket=>{
         socket.on('sending searchvalue',async (value)=>{
+            console.log('requesting artist query')
             const data  = await spotifyApi.search(value, req.session.acces_token)
             socket.emit('sending artistinfo', data.artists)            
         })

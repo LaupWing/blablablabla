@@ -1,3 +1,9 @@
+header.search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 .search h2{
     text-align: center;
     margin: 20px;
@@ -19,15 +25,33 @@
     outline: none;
     padding: .75rem;
     padding-left: 1rem;
-    width: 90%;
-    margin: auto;
+    width: 100%;
     border-radius: 40px;
     border: none;
-    display: block;
+    display: inline-block;
     padding-top: .5rem;
     padding-bottom: .5rem;
     background: var(--second-bg-color);
     color: white;
+}
+.input-container{
+    margin: auto;
+    position: relative;
+    display: inline-block;
+    width: 90%;
+}
+.input-container i{
+    position: absolute;
+    color: white;
+    right: 15px;
+    font-size: 15px;
+    top: 10px;
+    opacity: 0;
+    cursor: pointer;
+    transition: .25s;
+}
+.input-container i.reveal{
+    opacity: .3;
 }
 
 /* Search Results 
