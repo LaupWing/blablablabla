@@ -17,9 +17,9 @@ router.get('/', (req, res)=>{
 
 async function getFollowerInfo(list){
     const following = list.map(async (a)=>{
-                    const artist      = await spotifyApi.artist(a.id, acces_token)
-                    return artist
-                })
+        const artist      = await spotifyApi.artist(a.id, acces_token)
+        return artist
+    })
     const response   = await Promise.all(following)
     const reformList = response.map(item=>{
         return{
@@ -34,8 +34,9 @@ async function getFollowerInfo(list){
 
 function followedFirst(a,b){
     for(let f of following){
-        if(b.id === f.id)   return 1
-        else                return -1
+        if(a.id === f.id)      return 1
+        else if(b.id === f.id) return 1
+        else                   return -1
     }
 }
 
@@ -46,13 +47,14 @@ router.get('/index', (req, res)=>{
         socket.on('sending searchvalue',async (value)=>{
             console.log('requesting artist query')
             const data  = await spotifyApi.search(value, req.session.acces_token)
+            console.log(data.artists.items.sort(followedFirst))
             socket.emit('sending artistinfo', data.artists)            
         })
         socket.on('getArtistInfo', async (id)=>{
             const acces_token = req.session.acces_token
-            const artist     = await spotifyApi.artist(id, acces_token)
-            const related    = await spotifyApi.related(id, acces_token)
-            const topTracks  = await spotifyApi.topTracks(id, acces_token)
+            const artist      = await spotifyApi.artist(id, acces_token)
+            const related     = await spotifyApi.related(id, acces_token)
+            const topTracks   = await spotifyApi.topTracks(id, acces_token)
             console.log(artist)
             const artistClean  = {
                 image:  artist.images[0].url,
