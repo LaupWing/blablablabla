@@ -181,6 +181,17 @@ function requestingPosts(){
         .then(feed=>{
             if(document.querySelector('section#feed') === null) return
             document.querySelector('section#feed').innerHTML = feed
+            document.querySelector('.filter-btn').addEventListener('click', function(){
+                const container = document.querySelector('.filter-screen') 
+                container.classList.toggle('reveal')
+                if(container.classList.contains('reveal')){
+                    console.log('changing marker')
+                    document.querySelector('.filter-btn img').src = '/img/checkmark.png'
+                }else{
+                    document.querySelector('.filter-btn img').src = '/img/filter.png'
+                }
+                
+            })
             instgrm.Embeds.process()
             soundCloudEmbeds()
         })

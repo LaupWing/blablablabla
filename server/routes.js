@@ -85,19 +85,28 @@ router.get('/feed', async (req,res)=>{
     const yt         = new Youtube()
     yt.setKey("AIzaSyBeiiNR-feYHP2uC90LKZWVFlGx7IQ9ztE")
     yt.search(artistName,10,(err,response) => {
-        const youtube = response.items
-        .filter(i=>i.id.videoId)
-        .map(i=>{
-            return {
-                id:i.id.videoId,
-                date: i.snippet.publishedAt
-            }
-        })
-        res.render('partials/artist-partials/feeds',{
-            youtube,
-            insta,
-            soundcloud
-        })
+        try{
+            const youtube = response.items
+            .filter(i=>i.id.videoId)
+            .map(i=>{
+                return {
+                    id:i.id.videoId,
+                    date: i.snippet.publishedAt
+                }
+            })
+            res.render('partials/artist-partials/feeds',{
+                youtube,
+                insta,
+                soundcloud
+            })
+        }catch{
+            console.log(err)
+            res.render('partials/artist-partials/feeds',{
+                insta,
+                soundcloud,
+                youtube: null
+            })
+        }
     })
 
 })

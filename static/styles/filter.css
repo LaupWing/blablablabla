@@ -10,8 +10,36 @@
     position: fixed;
     right: 2%;
     bottom: 9%;
-    z-index: 1000;
+    z-index: 10000001;
 }
 .filter-btn img{
     width: 40px;   
+}
+.filter-screen{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 10000000;
+    display: flex;
+    align-items: center;
+    color: white;
+    flex-direction: column;
+    padding: 20px;
+    transform: translate(0,100%);
+    transition: .5s;
+}
+.filter-screen.reveal{
+    transform: translate(0,0);
+}
+.filter-screen h2{
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.filter-screen .sort{
+    width: 100%;
 }
