@@ -38,17 +38,18 @@ function renderFollowingList(list){
     removeChilds(container)
     list.forEach(item=>{
         const newEl = `
-            <li
-                data-id="${item.id}"
-            >
-                <div class="image-container-following">
-                    <img src="${item.image}">
-                </div>
-                <p>${item.name}</p>
-            </li>
+            <a href="/artist/${item.id}">
+                <li data-id="${item.id}">
+                    <div class="image-container-following">
+                        <img src="${item.image}">
+                    </div>
+                    <p>${item.name}</p>
+                </li>
+            </a>
         `
         container.insertAdjacentHTML('beforeend', newEl)
     })
+    addingEvents(document.querySelectorAll('.following ul.list a'))   
 }
 
 
