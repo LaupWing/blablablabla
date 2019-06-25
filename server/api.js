@@ -62,6 +62,19 @@ const soundCloud = async (name) =>{
     }
 }
 
+const wikipedia = async(name)=>{
+    try{
+        const allLinks  = await musicBrainz.artistLinks(removeAllNonAlpha(name))
+        const getLink = allLinks.filter(searchObj('wikipedia'))
+        const wikiLink  = (getLink.length===0) ? `https://en.wikipedia.org/api/rest_v1/page/summary/${name}` : allLinks.filter(searchObj('wikipedia'))[0].urlrsc
+        // console.log(wikiLink)
+        const data = await getData(`${wikiLink}`)
+        return data
+    }catch{
+        console.log('error wikipedia data isnt loading')
+    }
+}
+
 
 const instagram = async (name)=>{
     try{
@@ -123,4 +136,4 @@ const spotifyApi ={
 }
 
 
-module.exports = {spotifyApi, musicBrainz, instagram, soundCloud}
+module.exports = {spotifyApi, musicBrainz, instagram, soundCloud, wikipedia}

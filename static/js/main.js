@@ -1,10 +1,9 @@
 const socket = io()
 let url = null
 let prevState = []
-socket.on('sending artistinfo', (data)=>{
-    renderResults(data)
-})
-// document.body.addEventListener('click', ()=>console.log(url))
+
+socket.on('sending artistinfo', (data)=>renderResults(data))
+socket.on('change artistpage', (obj)=>renderArtistPage(obj))
 
 function init(){
     activeNav()
@@ -91,15 +90,68 @@ function getElement(href){
                 document.querySelector('main').classList.add("artist-page")
                 document.querySelector('i.fas.fa-chevron-left').addEventListener('click', getPrevState)
                 addingEvents(document.querySelectorAll('li.related-item a'))
+                // changeArtist(document.querySelectorAll('li.related-item a'))
                 requestingPosts()
-                instgrm.Embeds.process()
-                soundCloudEmbeds()
             }
         })
 }
+
+function changeArtist(nodes){
+    nodes.forEach(node=>{
+        node.addEventListener('click', function(){
+            event.preventDefault()
+            console.log(this)
+            const id = this.href.split('/artist/')[1]
+            socket.emit('getArtistInfo', id)
+        })
+    })
+}
+
+function renderArtistPage(obj){
+    const container = document.querySelector('main')
+    container.classList.add('fadeAway')
+    container.addEventListener('transitionend', ()=>artistTransition(obj))
+}
+
+function artistTransition(obj){
+    const container = document.querySelector('main')
+    container.removeEventListener('transitionend', ()=>artistTransition(obj))
+    // Changing artist header
+    console.log(obj.artistClean.image)
+    document.querySelector('.image-container').style.background  = `
+        background:
+        linear-gradient(
+        rgba(0, 0, 0, 0.45), 
+        rgba(0, 0, 0, 0.45)
+        ),
+        url(${obj.artistClean.image});
+        background-size: cover;
+    `
+    console.log(document.querySelector('.image-container'))
+    document.querySelector('.image-container').style.background  = `
+        background:pink
+    `
+    document.querySelector('.header-section.info h1').textContent = obj.artistClean.name
+
+    // Changing related content
+    const related = Array.from(document.querySelectorAll('li.related-item'))
+    for(let relate of related ){
+        relate.querySelector('a').href  = `/artist/${obj.relatedClean.id}`
+        relate.querySelector('img').src = obj.relatedClean.image 
+        relate.querySelector('h4.related-item-name').textContent = obj.relatedClean.name
+    }
+    container.classList.remove('fadeAway')
+}
+
+
 function getPrevState(){
+    const container = document.querySelector('main')
     let state = prevState[prevState.length-1]
     prevState = prevState.filter(state=>state!==null && state!==prevState[prevState.length-1])
+    container.classList.add('fadeAway')
+    if(state ==='http://localhost:3001/search') {
+        container.classList.remove('artist-page')
+    }
     getElement(state)
 }
 
@@ -109,6 +161,8 @@ function requestingPosts(){
         .then(feed=>{
             if(document.querySelector('section#feed') === null) return
             document.querySelector('section#feed').innerHTML = feed
+            instgrm.Embeds.process()
+            soundCloudEmbeds()
         })
 }
 
@@ -155,6 +209,7 @@ function submitting(){
 
     }
 }
+
 
 
 function activeNav(){
