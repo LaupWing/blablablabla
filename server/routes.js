@@ -1,18 +1,16 @@
-const express = require('express')
-const router  = express.Router()
-const {spotifyApi} = require('./api.js')
-const {instagram} = require('./api.js')
-const {soundCloud} = require('./api.js')
-const {wikipedia} = require('./api.js')
-
-let artistName   = null
-const Youtube = require('youtube-node')
+const express       = require('express')
+const router        = express.Router()
+const {spotifyApi}  = require('./api.js')
+const {instagram}   = require('./api.js')
+const {soundCloud}  = require('./api.js')
+const {wikipedia}   = require('./api.js')
+// const following = []
+let artistName      = null
+const Youtube       = require('youtube-node')
 
 router.get('/', (req, res)=>{
     res.render('login')
 })
-
-
 
 router.get('/index', (req, res)=>{
     const io = req.app.get('socketio')
@@ -67,7 +65,7 @@ router.get('/testingdata', async (req, res)=>{
 })
 
 router.get('/artist/:id', async(req,res)=>{
-    const id = req.params.id
+    const id          = req.params.id
     const acces_token = req.session.acces_token
     
     const artist     = await spotifyApi.artist(id, acces_token)
@@ -84,7 +82,7 @@ router.get('/artist/:id', async(req,res)=>{
 router.get('/feed', async (req,res)=>{
     const insta      = await instagram(artistName)
     const soundcloud = await soundCloud(artistName)
-    const yt = new Youtube()
+    const yt         = new Youtube()
     yt.setKey("AIzaSyBeiiNR-feYHP2uC90LKZWVFlGx7IQ9ztE")
     yt.search(artistName,10,(err,response) => {
         const youtube = response.items
