@@ -30,9 +30,13 @@
     padding: 20px;
     transform: translate(0,100%);
     transition: .5s;
+    opacity: 0;
+    user-select: none;
 }
 .filter-screen.reveal{
     transform: translate(0,0);
+    opacity: 1;
+    user-select: auto;
 }
 .filter-screen h2{
     height: 15%;

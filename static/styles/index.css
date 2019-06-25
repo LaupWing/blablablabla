@@ -28,6 +28,18 @@
     overflow: hidden;
 }
 
+.following ul.list{
+    display: flex;
+    overflow-x: scroll;
+    max-width: 90%;
+}
+.following ul.list a{
+    margin: 0 15px;
+}
+.following ul.list a:last-child{
+    margin-right: 40px;
+}
+
 .image-container-following{
     border: 3px solid #7f6bff;
 }

@@ -148,6 +148,8 @@ function getElement(href){
             // If the class addNew excist that means that we are on the homepage
             if(document.querySelector('.addNew a')){
                 addingEvents(document.querySelectorAll('.addNew a'))
+            }else if(document.querySelector('.image-container-following')){
+                addingEvents(document.querySelectorAll('ul.list a'))
             }
             turnOffLink(false)
             // If the class artist-header excist that means that we are on the artistpage
@@ -164,13 +166,14 @@ function getElement(href){
 
 function followingArtist(){
     this.classList.add('followed')
-    let list = localStorage.getItem('following') ? localStorage.getItem('following') : [] 
+    let list = localStorage.getItem('following') ? JSON.parse(localStorage.getItem('following')) : [] 
     const id = document.querySelector('header.artist-header').dataset.id
     const name = document.querySelector('h1.artist-title').textContent
     list.push({
         id, 
         name
     })
+    socket.emit('register list',list)
     localStorage.setItem('following', JSON.stringify(list))
 }
 

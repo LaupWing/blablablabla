@@ -101,7 +101,8 @@ a{
 ------------------------------ */
 .navigation::-webkit-scrollbar,
 .related-list::-webkit-scrollbar,
-.albums-list::-webkit-scrollbar {
+.albums-list::-webkit-scrollbar,
+.following ul.list::-webkit-scrollbar {
   width: 1px;
   height: 1px;
 }

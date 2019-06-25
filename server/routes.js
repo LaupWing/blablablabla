@@ -4,7 +4,8 @@ const {spotifyApi}  = require('./api.js')
 const {instagram}   = require('./api.js')
 const {soundCloud}  = require('./api.js')
 const {wikipedia}   = require('./api.js')
-// const following = []
+let following
+let acces_token 
 let artistName      = null
 const Youtube       = require('youtube-node')
 
@@ -14,7 +15,32 @@ router.get('/', (req, res)=>{
     })
 })
 
+async function getFollowerInfo(list){
+    const following = list.map(async (a)=>{
+                    const artist      = await spotifyApi.artist(a.id, acces_token)
+                    return artist
+                })
+    const response   = await Promise.all(following)
+    const reformList = response.map(item=>{
+        return{
+            name:   item.name,
+            id:     item.id,
+            image:  item.images[0].url
+        }
+    })
+    console.log(reformList)
+    return reformList 
+}
+
+function followedFirst(a){
+    for(let f of following){
+        if(a.id === f.id)   return 1
+        else                return -1
+    }
+}
+
 router.get('/index', (req, res)=>{
+    acces_token = req.session.acces_token
     const io = req.app.get('socketio')
     io.on('connection', socket=>{
         socket.on('sending searchvalue',async (value)=>{
@@ -46,23 +72,19 @@ router.get('/index', (req, res)=>{
                 topTracks
             })
         })
-        socket.on('list', async (list)=>{
-            req.session.list = list
+        socket.on('list', async list=>{
             try{
-                const following = list.map(async (a)=>{
-                    const acces_token = req.session.acces_token
-                    const artist      = await spotifyApi.artist(a.id, acces_token)
-                    return artist
-                })
-                const response   = await Promise.all(following)
-                const reformList = response.map(item=>{
-                    return{
-                        name:   item.name,
-                        id:     item.id,
-                        image:  item.images[0].url
-                    }
-                }) 
-                socket.emit('followers info',reformList)
+                const results = await getFollowerInfo(list)
+                following = results
+                socket.emit('followers info', results)
+            }catch{
+                console.log('something went wrong with the following list')
+            }
+        })
+        socket.on('register list', async list=>{
+            try{
+                const results = await getFollowerInfo(list)
+                following = results
             }catch{
                 console.log('something went wrong with the following list')
             }
@@ -74,8 +96,14 @@ router.get('/index', (req, res)=>{
     })
 })
 
-router.get('/home', (req, res)=>{
-    res.render('partials/following')
+router.get('/home', async (req, res)=>{
+    if(following !== undefined){
+        const list = following
+        res.render('partials/followingList', {list})
+    }else{
+        console.log('list is niet aanwezig')
+        res.render('partials/following')
+    }
 })
 
 router.get('/search', (req, res)=>{
