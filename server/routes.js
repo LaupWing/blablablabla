@@ -48,17 +48,24 @@ router.get('/index', (req, res)=>{
         })
         socket.on('list', async (list)=>{
             req.session.list = list
-            const following = list.map(async (a)=>{
-                const acces_token = req.session.acces_token
-                const artist      = await spotifyApi.artist(a.id, acces_token)
-                return artist
-            })
-            const response = await Promise.all(following)
-            socket.emit('followers info', {
-                name:   response.name,
-                id:     response.id,
-                image:  response.images[0].url
-            })
+            try{
+                const following = list.map(async (a)=>{
+                    const acces_token = req.session.acces_token
+                    const artist      = await spotifyApi.artist(a.id, acces_token)
+                    return artist
+                })
+                const response   = await Promise.all(following)
+                const reformList = response.map(item=>{
+                    return{
+                        name:   item.name,
+                        id:     item.id,
+                        image:  item.images[0].url
+                    }
+                }) 
+                socket.emit('followers info',reformList)
+            }catch{
+                console.log('something went wrong with the following list')
+            }
         })
     })
     res.render('index',{

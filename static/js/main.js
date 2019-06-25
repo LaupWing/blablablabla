@@ -4,6 +4,7 @@ let prevState = []
 
 socket.on('sending artistinfo', (data)=>renderResults(data))
 socket.on('change artistpage', (obj)=>renderArtistPage(obj))
+socket.on('followers info', (list)=>renderFollowingList(list))
 
 function init(){
     activeNav()
@@ -29,6 +30,25 @@ function checkFollowingList(){
     // fetch(req)
     //     .then(data=>data.text())
     //     .then(res=>console.log(res))
+}
+
+function renderFollowingList(list){
+    console.log(list)
+    const container = document.querySelector('ul.list')
+    removeChilds(container)
+    list.forEach(item=>{
+        const newEl = `
+            <li
+                data-id="${item.id}"
+            >
+                <div class="image-container-following">
+                    <img src="${item.image}">
+                </div>
+                <p>${item.name}</p>
+            </li>
+        `
+        container.insertAdjacentHTML('beforeend', newEl)
+    })
 }
 
 
