@@ -82,7 +82,7 @@
     align-items: center;
     flex-direction: column;
     bottom: 15%;
-    z-index: 1000;
+    z-index: 10000000000000000000000;
   }
   .artist-header .bottom-shadow{
     background-image: linear-gradient(transparent, var(--main-bg-color));

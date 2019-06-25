@@ -9,7 +9,9 @@ let artistName      = null
 const Youtube       = require('youtube-node')
 
 router.get('/', (req, res)=>{
-    res.render('login')
+    res.render('login', {
+        script:false
+    })
 })
 
 router.get('/index', (req, res)=>{
@@ -44,9 +46,24 @@ router.get('/index', (req, res)=>{
                 topTracks
             })
         })
+        socket.on('list', async (list)=>{
+            req.session.list = list
+            const following = list.map(async (a)=>{
+                const acces_token = req.session.acces_token
+                const artist      = await spotifyApi.artist(a.id, acces_token)
+                return artist
+            })
+            const response = await Promise.all(following)
+            socket.emit('followers info', {
+                name:   response.name,
+                id:     response.id,
+                image:  response.images[0].url
+            })
+        })
     })
     res.render('index',{
         currentPage: 'partials/following.ejs',
+        script: true
     })
 })
 
@@ -109,6 +126,11 @@ router.get('/feed', async (req,res)=>{
         }
     })
 
+})
+
+router.post('/testing', async(req,res)=>{
+    console.log(req.body)
+    res.send('index')
 })
 
 

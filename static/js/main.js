@@ -9,12 +9,32 @@ function init(){
     activeNav()
     const links = Array.from(document.querySelectorAll('nav#nav a'))
     links.push(document.querySelector('.addNew a'))
+    checkFollowingList()
     addingEvents(links)
+}
+
+function checkFollowingList(){
+    const list = JSON.parse(localStorage.getItem('following'))
+    if(list===null)    return
+    socket.emit('list', list)
+    // let uri = 'http://localhost:3001/testing'
+    // let formData = new FormData()
+    // formData.append("testing",'test')
+    // let options = {
+    //     method: 'POST',
+    //     mode: 'cors',
+    //     body: formData
+    // }
+    // let req = new Request(uri, options)
+    // fetch(req)
+    //     .then(data=>data.text())
+    //     .then(res=>console.log(res))
 }
 
 
 function renderResults(data){
     console.log('rendering results')
+    // console.log(data)
     const container = document.querySelector('section.search-main')
     removeChilds(container)
     if(data===null)     return
@@ -99,21 +119,38 @@ function getElement(href){
             }
             container.insertAdjacentHTML('beforeend',body)
             container.classList.remove('fadeAway')
+            // If the id search excist that means that we are on the searchpage
             if(document.querySelector('input#search')){
                 console.log('adding search ')
                 getSearchResults()
             }
+            // If the class addNew excist that means that we are on the homepage
             if(document.querySelector('.addNew a')){
                 addingEvents(document.querySelectorAll('.addNew a'))
             }
             turnOffLink(false)
+            // If the class artist-header excist that means that we are on the artistpage
             if(document.querySelector('header.artist-header')!==null){
                 document.querySelector('main').classList.add("artist-page")
+                document.querySelector('.btn.btn-follow').addEventListener('click', followingArtist)
                 document.querySelector('i.fas.fa-chevron-left').addEventListener('click', getPrevState)
                 addingEvents(document.querySelectorAll('li.related-item a'))
                 requestingPosts()
             }
         })
+}
+
+
+function followingArtist(){
+    this.classList.add('followed')
+    let list = localStorage.getItem('following') ? localStorage.getItem('following') : [] 
+    const id = document.querySelector('header.artist-header').dataset.id
+    const name = document.querySelector('h1.artist-title').textContent
+    list.push({
+        id, 
+        name
+    })
+    localStorage.setItem('following', JSON.stringify(list))
 }
 
 function changeArtist(nodes){
