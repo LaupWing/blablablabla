@@ -32,9 +32,9 @@ async function getFollowerInfo(list){
     return reformList 
 }
 
-function followedFirst(a){
+function followedFirst(a,b){
     for(let f of following){
-        if(a.id === f.id)   return 1
+        if(b.id === f.id)   return 1
         else                return -1
     }
 }
