@@ -2,7 +2,7 @@
     <h2>Following</h2>
     <ul class="list">
         <% list.forEach(item=>{ %>
-            <a href="/artist/<%=item.spotifyId%>&<%=item.id%>">
+            <a class="following" href="/artist/<%=item.spotifyId%>&<%=item.id%>">
                 <li data-id="<%=item.id%>">
                     <div class="image-container-following">
                         <img src="<%=item.img%>">

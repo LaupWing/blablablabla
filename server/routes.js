@@ -1,15 +1,11 @@
 const express       = require('express')
 const router        = express.Router()
 const {spotifyApi}  = require('./api.js')
-const {instagram}   = require('./api.js')
 const {soundCloud}  = require('./api.js')
 const {wikipedia}   = require('./api.js')
 const {ourDB}       = require('./api.js')
 
-let following
-let acces_token 
-let artistName      = null
-const Youtube       = require('youtube-node')
+let following       
 
 router.get('/', (req, res)=>{
     res.render('login', {
@@ -38,6 +34,7 @@ router.get('/index', async (req, res)=>{
     acces_token = req.session.acces_token
     const io = req.app.get('socketio')
     req.session.user = await ourDB.userInfo()
+    following = req.session.user.following
     io.on('connection', socket=>{
         socket.on('sending searchvalue',async (value)=>{
             try{
@@ -58,28 +55,13 @@ router.get('/index', async (req, res)=>{
                 })
             }
         })
-        socket.on('requesting homefeed', async ()=>{
-            const user = req.session.user
-            const feeds = user.following.map(async (fw)=>{
-                const artistFeed = await ourDB.detail(fw.id)
-                const soundcloud = await soundCloud(artistFeed.name)
-                const posts ={
-                    twitter: artistFeed.tweets,
-                    instagram: artistFeed.instagramPosts,
-                    events: artistFeed.events,
-                    youtube: artistFeed['youtube-videos'],
-                    soundcloud
-                }
-                return posts
-            })
-            const homefeed = await Promise.all(feeds)
-            socket.emit('homepage feed', homefeed)
-        })
         socket.on('update list', async ()=>{
-            const user = await ourDB.userInfo()
-            req.session.user = user
-            console.log('updated list')
-            console.log(req.session.user)
+            setTimeout(async()=>{
+                const user = await ourDB.userInfo()
+                req.session.user = user
+                console.log('updated list')
+                following = user.following
+            },1000)
         })
     })
     if(req.session.user.following.length>0){
@@ -98,9 +80,8 @@ router.get('/index', async (req, res)=>{
 })
 
 router.get('/home', async (req, res)=>{
-    if(req.session.user.following.length>0){
-        const list = await getCorrespondingImg(req.session.user.following)
-        console.log(list)
+    if(following.length>0){
+        const list = await getCorrespondingImg(following)
         res.render('partials/followingList',{list})
     }else{
         console.log('no folowers')
@@ -113,8 +94,7 @@ router.get('/search', (req, res)=>{
 })
 
 router.get('/homefeed', async (req, res)=>{
-    const user = req.session.user
-    const feeds = user.following.map(async (fw)=>{
+    const feeds = following.map(async (fw)=>{
         const artistFeed = await ourDB.detail(fw.id)
         const soundcloud = await soundCloud(artistFeed.name)
         const posts ={
@@ -178,7 +158,7 @@ async function getCorrespondingImg(list){
     const spotify = list
         .map(item=>item.name)
         .map(name=>{
-            return spotifyApi.search(name,acces_token)
+            return spotifyApi.search(name, acces_token)
         })
     const response   = await Promise.all(spotify)
     const images     = response

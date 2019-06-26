@@ -5,7 +5,6 @@ let prevState = []
 socket.on('sending artistinfo', (data)=>searchPage.renderSearchResults(data))
 socket.on('change artistpage', (obj)=>renderArtistPage(obj))
 socket.on('followers info', (list)=>renderFollowingList(list))
-socket.on('homepage feed', (feeds)=>console.log(feeds))
 
 const init = {
     consoleStyling: 'background: #222; color: #bada55',
@@ -159,6 +158,7 @@ const switchingPage = {
         if(this.href === 'javascript:void(0);')   return
         states.prevState.push(states.url)
         states.url = this.href
+        console.log(states.url)
         const main = document.querySelector('main')
         main.classList.add('fadeAway')
         preventError.turnOffLink(true)
@@ -218,6 +218,9 @@ const fetchHTML = {
         // If the class addNew excist that means that we are on the homepage
         if(document.querySelector('.addNew a')){
             navigation.events(document.querySelectorAll('.addNew a'))
+        }
+        else if(document.querySelector('section#homeFeed')){
+            homePage.requestHomeFeed()
         }
         else if(document.querySelector('.image-container-following')){
             navigation.events(document.querySelectorAll('ul.list a'))
