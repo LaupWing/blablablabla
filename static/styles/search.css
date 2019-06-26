@@ -20,6 +20,13 @@ header.search{
     border-radius: 0 40px 40px 0;
 }
 
+.search-main .error{
+    width: 100%;
+}
+h3.nothing{
+    color: white;
+    text-align: center;
+}
 #search {
     font-size: 1rem;
     outline: none;

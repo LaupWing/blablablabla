@@ -20,6 +20,26 @@ function getData(url){
         .then(response=> response.json())
 }
 
+const ourDB ={
+    nameQuery: (name)=>{
+        const url = `http://185.57.8.62:3000/api/v1/artist?name=${name}`
+        return getData(url)
+    },
+    list: ()=>{
+        const url = `http://185.57.8.62:3000/api/v1/artists`
+        return getData(url)
+    },
+    detail: ()=>{
+        const url = `http://185.57.8.62:3000/api/v1/artists?id=${id}`
+        return getData(url)
+    },
+    userInfo: ()=>{
+        
+    }
+
+}
+
+
 const musicBrainz = {
     artistLinks: async name => {
         console.log(name)
@@ -138,4 +158,11 @@ const spotifyApi ={
 }
 
 
-module.exports = {spotifyApi, musicBrainz, instagram, soundCloud, wikipedia}
+module.exports = {
+    spotifyApi, 
+    musicBrainz, 
+    instagram, 
+    soundCloud, 
+    wikipedia,
+    ourDB
+}

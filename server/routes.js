@@ -4,6 +4,8 @@ const {spotifyApi}  = require('./api.js')
 const {instagram}   = require('./api.js')
 const {soundCloud}  = require('./api.js')
 const {wikipedia}   = require('./api.js')
+const {ourDB}       = require('./api.js')
+
 let following
 let acces_token 
 let artistName      = null
@@ -32,23 +34,34 @@ async function getFollowerInfo(list){
     return reformList 
 }
 
-function followedFirst(a,b){
-    for(let f of following){
-        if(a.id === f.id)      return 1
-        else if(b.id === f.id) return 1
-        else                   return -1
-    }
-}
+// function followedFirst(a,b){
+//     for(let f of following){
+//         if(a.id === f.id)      return 1
+//         else if(b.id === f.id) return 1
+//         else                   return -1
+//     }
+// }
 
 router.get('/index', (req, res)=>{
     acces_token = req.session.acces_token
     const io = req.app.get('socketio')
     io.on('connection', socket=>{
         socket.on('sending searchvalue',async (value)=>{
-            console.log('requesting artist query')
-            const data  = await spotifyApi.search(value, req.session.acces_token)
-            console.log(data.artists.items.sort(followedFirst))
-            socket.emit('sending artistinfo', data.artists)            
+            try{
+                const result        = await ourDB.nameQuery(value)
+                const searchSpotify = await spotifyApi.search(result.name,acces_token)
+                const img           = searchSpotify.artists.items[0].images[0].url
+                result.img          = img
+                socket.emit('sending artistinfo', {
+                    result,
+                    foundSomething: true
+                })            
+            }catch{
+                socket.emit('sending artistinfo', {
+                    result          : 'Found nothing!',
+                    foundSomething  : false
+                })
+            }
         })
         socket.on('getArtistInfo', async (id)=>{
             const acces_token = req.session.acces_token
@@ -162,7 +175,6 @@ router.get('/feed', async (req,res)=>{
             })
         }
     })
-
 })
 
 router.post('/testing', async(req,res)=>{
