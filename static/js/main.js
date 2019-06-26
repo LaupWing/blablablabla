@@ -15,7 +15,7 @@ const init = {
         console.log('%c Adding navigation click events', init.consoleStyling)
         const links = Array.from(document.querySelectorAll('nav#nav a'))
         links.push(document.querySelector('.addNew a'))
-        addingEvents.links(links)
+        navigation.events(links)
     }
 }
 
@@ -37,13 +37,26 @@ const states = {
 
 
 const navigation = {
+    consoleStyling: 'color: orange',
     navState: ()=>{
 
+    },
+    events: (links)=>{
+        console.log('%c Adding events to links or link', navigation.consoleStyling)
+        if(links.length){
+            links.forEach(link=>{
+                link.addEventListener('click', switchingPage.renderNewPage)
+            })
+        }else{
+            links.addEventListener('click', switchingPage.renderNewPage)
+        }
     }
 }
 
 const searchPage= {
+    consoleStyling: 'color: white; background: #171717',
     renderSearchResults:(result)=>{
+        console.log("%c searchPage- rendering search results", searchPage.consoleStyling)
         const container = document.querySelector('section.search-main')
         removeChilds(container)
         const item = result.result
@@ -59,7 +72,7 @@ const searchPage= {
             `
             container.insertAdjacentHTML('beforeend', newElement)
             document.querySelector('a.result-link')
-            addingEvents.links(document.querySelector('a.result-link'))
+            navigation.events(document.querySelector('a.result-link'))
         }else{
             const newElement =`
             <div class="error">
@@ -70,12 +83,14 @@ const searchPage= {
         }
     },
     events: ()=>{
+        console.log("%c searchPage- adding events", searchPage.consoleStyling)
         const input = document.querySelector('#search')
         const deleteInput = document.querySelector('.input-container i')
         deleteInput.addEventListener('click', searchPage.clearSearch)
         input.addEventListener('input', searchPage.getSearchResults)
     },
     getSearchResults: ()=>{
+        console.log("%c searchPage- typing", searchPage.consoleStyling)
         const input = document.querySelector('#search')
         if(input.value.length === 0){
             const container = document.querySelector('section.search-main')
@@ -91,6 +106,7 @@ const searchPage= {
         }
     },
     clearSearch: ()=>{
+        console.log("%c searchPage- clearing", searchPage.consoleStyling)
         const input = document.querySelector('#search')
         input.value = ''
         removeChilds(document.querySelector('section.search-main'))
@@ -103,22 +119,10 @@ function removeChilds(container){
     }
 }
 
-const addingEvents = {
-    consoleStyling: 'color: orange',
-    links: (links)=>{
-        console.log('%c Adding events to links or link', addingEvents.consoleStyling)
-        if(links.length){
-            links.forEach(link=>{
-                link.addEventListener('click', switchingPage.renderNewPage)
-            })
-        }else{
-            links.addEventListener('click', switchingPage.renderNewPage)
-        }
-    }
-}
-
 const switchingPage = {
+    consoleStyling: 'color: white; background: blue',
     renderNewPage: function(){
+        console.log("%c switchingPage- rendering new page", preventError.consoleStyling)
         event.preventDefault()
         if(this.href === 'javascript:void(0);')   return
         states.prevState.push(states.url)
@@ -138,7 +142,9 @@ const switchingPage = {
 }
 
 const preventError = {
+    consoleStyling: 'color: red; background: yellow',
     turnOffLink: (disable)=>{
+        console.log("%c preventError- disable nav links", preventError.consoleStyling)
         const links = document.querySelectorAll('nav#nav a')
         links.forEach((link,index)=>{
             if(disable){
@@ -156,8 +162,9 @@ const preventError = {
 
 
 const fetchHTML = {
+    consoleStyling: 'color: white; background: black',
     getElement: (href)=>{
-        console.log(href)
+        console.log("%c fetchHTML- Creating new elements", fetchHTML.consoleStyling)
         const container = document.querySelector('main')
         if(href === 'javascript:void(0);')   return
         fetch(href)
@@ -170,45 +177,28 @@ const fetchHTML = {
         })    
     },
     checkWhichPage: ()=>{
+        console.log("%c fetchHTML- Checking Which page user is on", fetchHTML.consoleStyling)
         preventError.turnOffLink(false)
         // If the id search excist that means that we are on the searchpage
         if(document.querySelector('input#search')){
-            console.log('adding search ')
-            // getSearchResults()
             searchPage.events()
         }
         // If the class addNew excist that means that we are on the homepage
         if(document.querySelector('.addNew a')){
-            addingEvents.links(document.querySelectorAll('.addNew a'))
+            navigation.events(document.querySelectorAll('.addNew a'))
         }
         else if(document.querySelector('.image-container-following')){
-            addingEvents.links(document.querySelectorAll('ul.list a'))
+            navigation.events(document.querySelectorAll('ul.list a'))
         }
         // If the class artist-header excist that means that we are on the artistpage
         if(document.querySelector('header.artist-header')!==null){
             document.querySelector('main').classList.add("artist-page")
             document.querySelector('i.fas.fa-chevron-left').addEventListener('click', states.getPrevState)
-            addingEvents.links(document.querySelectorAll('li.related-item a'))
+            navigation.events(document.querySelectorAll('li.related-item a'))
             // requestingPosts()
         }
     }
 }
-
-
-
-
-function getPrevState(){
-    const container = document.querySelector('main')
-    let state = prevState[prevState.length-1]
-    prevState = prevState.filter(state=>state!==null && state!==prevState[prevState.length-1])
-    container.classList.add('fadeAway')
-    if(state ==='http://localhost:3001/search') {
-        container.classList.remove('artist-page')
-    }
-    fetchHTML.getElement(state)
-}
-
-
 
 function soundCloudEmbeds(){
     const allEmbeds = document.querySelectorAll('.putTheWidgetHere')
@@ -222,8 +212,6 @@ function soundCloudEmbeds(){
 }
 
 // Prevent the user from clicking the link 2 times
-
-
 
 window.addEventListener('load', ()=>init.firstEnter())
 
@@ -249,6 +237,16 @@ window.addEventListener('load', ()=>init.firstEnter())
 // --------------------------------------------------------------------------------
 // ################################### OLD CODE ###################################
 // --------------------------------------------------------------------------------
+// function getPrevState(){
+//     const container = document.querySelector('main')
+//     let state = prevState[prevState.length-1]
+//     prevState = prevState.filter(state=>state!==null && state!==prevState[prevState.length-1])
+//     container.classList.add('fadeAway')
+//     if(state ==='http://localhost:3001/search') {
+//         container.classList.remove('artist-page')
+//     }
+//     fetchHTML.getElement(state)
+// }
 
 // function checkFollowingList(){
 //     const list = JSON.parse(localStorage.getItem('following'))
