@@ -193,23 +193,84 @@ const fetchHTML = {
         // If the class artist-header excist that means that we are on the artistpage
         if(document.querySelector('header.artist-header')!==null){
             document.querySelector('main').classList.add("artist-page")
-            document.querySelector('i.fas.fa-chevron-left').addEventListener('click', states.getPrevState)
-            navigation.events(document.querySelectorAll('li.related-item a'))
-            // requestingPosts()
+            artistPage.events()
         }
     }
 }
 
-function soundCloudEmbeds(){
-    const allEmbeds = document.querySelectorAll('.putTheWidgetHere')
-    if(allEmbeds.length===0)    return
-    allEmbeds.forEach((embed,i)=>{
-        const url = embed.getAttribute('data-url')
-        SC.oEmbed(url, {
-            element: document.querySelector(`.putTheWidgetHere#id${i}`)
-        });
-    })
+const artistPage = {
+    events: ()=>{
+        document.querySelector('i.fas.fa-chevron-left').addEventListener('click', states.getPrevState)
+        navigation.events(document.querySelectorAll('li.related-item a'))
+        const zekkieid = document.querySelector('header.artist-header').dataset.zekkieid
+        feed.requestingFeed(zekkieid)
+        document.querySelector('a.btn.btn-follow').addEventListener('click', artistPage.follow) 
+    },
+    renderPosts: (posts)=>{
+        const feed = document.querySelector('section#feed')
+        removeChilds(feed)
+        feed.insertAdjacentHTML('beforeend', posts)
+    },
+    follow: ()=>{
+        event.preventDefault()
+        const zekkieid = document.querySelector('header.artist-header').dataset.zekkieid
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST",`http://185.57.8.62:3000/api/v1/user/follow?userId=1&artistId=${zekkieid}`);
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        xhr.send();
+    },
+    unfollow: ()=>{
+
+    },
+    checkFollowing: async ()=>{
+        const res  = await fetch('http://185.57.8.62:3000/api/v1/user?id=1')
+        const user = await res.json()
+        const id   = document.querySelector('header.artist-header').dataset.zekkieid
+        user.following.forEach(fw=>{
+            if(fw.artistId === id){
+                const btn = document.querySelector('a.btn.btn-follow')
+                btn.textContent = unfollow
+                btn.classList.add('following')
+            }
+        })
+    }
 }
+
+
+
+const feed = {
+    requestingFeed: async (id)=>{
+        const value = { id }
+        const config = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(value)
+          }
+        const response = await fetch('/feed', config)
+        const posts = await response.text()
+        artistPage.renderPosts(posts)
+        feed.iframeActivate()
+    },
+    soundCloudEmbeds: ()=>{
+        const allEmbeds = document.querySelectorAll('.putTheWidgetHere')
+        if(allEmbeds.length===0)    return
+        allEmbeds.forEach((embed,i)=>{
+            const url = embed.getAttribute('data-url')
+            SC.oEmbed(url, {
+                element: document.querySelector(`.putTheWidgetHere#id${i}`)
+            });
+        })
+    },
+    iframeActivate: ()=>{
+        instgrm.Embeds.process()
+        feed.soundCloudEmbeds()
+        twttr.widgets.load()
+    }
+}
+
+
 
 // Prevent the user from clicking the link 2 times
 

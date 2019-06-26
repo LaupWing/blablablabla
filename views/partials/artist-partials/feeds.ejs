@@ -1,6 +1,6 @@
 <% include filter.ejs %>
-<% if(insta){ %>
-    <% insta.forEach((i)=>{ %>
+<% if(instagram){ %>
+    <% instagram.forEach((i)=>{ %>
         <div class="iframe-wrapper">
             <header class="iframe">
                 <img src="/img/instagram.png" alt="">
@@ -18,14 +18,30 @@
         </div>
     <% }) %>
 <% } %>
-<% if (youtube !== null){ %>
+<% if (youtube){ %>
     <% youtube.forEach((yt)=>{ %>
-        <div class="iframe-wrapper">
+        <div class="iframe-wrapper"
+            data-date="<%= yt.post_date %>" 
+        >
             <header class="iframe">
-                    <img src="/img/youtube.png" alt="">
+                <img src="/img/youtube.png" alt="">
             </header>
-            <iframe src="https://www.youtube.com/embed/<%=yt.id%>">
+            <iframe
+                src="https://www.youtube.com/embed/<%=yt.video_id%>">
             </iframe>
+        </div>
+    <% }) %>
+<% } %>
+
+<% if (twitter){ %>
+    <% twitter.forEach((tw)=>{ %>
+        <div class="iframe-wrapper"
+            data-date="<%= tw.post_date %>"
+        >
+            <header class="iframe">
+                Twitter
+            </header>
+            <%-tw.html%>
         </div>
     <% }) %>
 <% } %>

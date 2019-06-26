@@ -122,36 +122,53 @@ router.get('/artist/:id', async(req,res)=>{
     })
 })
 
-router.get('/feed', async (req,res)=>{
-    const insta      = await instagram(artistName)
-    const soundcloud = await soundCloud(artistName)
-    const yt         = new Youtube()
-    yt.setKey("AIzaSyBeiiNR-feYHP2uC90LKZWVFlGx7IQ9ztE")
-    yt.search(artistName,10,(err,response) => {
-        try{
-            const youtube = response.items
-            .filter(i=>i.id.videoId)
-            .map(i=>{
-                return {
-                    id:i.id.videoId,
-                    date: i.snippet.publishedAt
-                }
-            })
-            res.render('partials/artist-partials/feeds',{
-                youtube,
-                insta,
-                soundcloud
-            })
-        }catch{
-            console.log(err)
-            res.render('partials/artist-partials/feeds',{
-                insta,
-                soundcloud,
-                youtube: null
-            })
-        }
-    })
+// router.get('/feed', async (req,res)=>{
+//     const insta      = await instagram(artistName)
+//     const soundcloud = await soundCloud(artistName)
+//     const yt         = new Youtube()
+//     yt.setKey("AIzaSyBeiiNR-feYHP2uC90LKZWVFlGx7IQ9ztE")
+//     yt.search(artistName,10,(err,response) => {
+//         try{
+//             const youtube = response.items
+//             .filter(i=>i.id.videoId)
+//             .map(i=>{
+//                 return {
+//                     id:i.id.videoId,
+//                     date: i.snippet.publishedAt
+//                 }
+//             })
+//             res.render('partials/artist-partials/feeds',{
+//                 youtube,
+//                 insta,
+//                 soundcloud
+//             })
+//         }catch{
+//             console.log(err)
+//             res.render('partials/artist-partials/feeds',{
+//                 insta,
+//                 soundcloud,
+//                 youtube: null
+//             })
+//         }
+//     })
+// })
+
+router.post('/feed', async(req,res)=>{
+    const id         = req.body.id
+    const artistFeed = await ourDB.detail(id)
+
+    const soundcloud = await soundCloud(artistFeed.name)
+    const posts ={
+        twitter: artistFeed.tweets,
+        instagram: artistFeed.instagramPosts,
+        events: artistFeed.events,
+        youtube: artistFeed['youtube-videos'],
+        soundcloud
+    }
+    res.render('partials/artist-partials/feeds', posts)
 })
+
+
 
 router.post('/testing', async(req,res)=>{
     console.log(req.body)

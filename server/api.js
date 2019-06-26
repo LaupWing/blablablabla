@@ -29,8 +29,8 @@ const ourDB ={
         const url = `http://185.57.8.62:3000/api/v1/artists`
         return getData(url)
     },
-    detail: ()=>{
-        const url = `http://185.57.8.62:3000/api/v1/artists?id=${id}`
+    detail: (id)=>{
+        const url = `http://185.57.8.62:3000/api/v1/artist?id=${id}`
         return getData(url)
     },
     userInfo: ()=>{
@@ -51,7 +51,6 @@ const musicBrainz = {
                 return{
                     type:       rel.type,
                     urlrsc:     rel.url.resource
-
                 }
             })
     },
