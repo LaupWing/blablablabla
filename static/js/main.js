@@ -5,6 +5,7 @@ let prevState = []
 socket.on('sending artistinfo', (data)=>searchPage.renderSearchResults(data))
 socket.on('change artistpage', (obj)=>renderArtistPage(obj))
 socket.on('followers info', (list)=>renderFollowingList(list))
+socket.on('test', (something)=>console.log(something))
 
 // function init(){
 //     activeNav()
@@ -77,7 +78,7 @@ const searchPage= {
             const img = item.img ? item.img : '/img/placeholder.png' 
             const newElement =`
             <div data-id="${item.id}" class="result-item">
-                <a class="result-link" href="/artist/${item.id}">
+                <a class="result-link" href="/artist/${item.spotifyId}">
                 <img class="result-img" src="${img}" alt="">
                 <p class="result-name">${item.name}</p>
                 </a>

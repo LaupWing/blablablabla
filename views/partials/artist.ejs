@@ -6,7 +6,7 @@
     <div class="click-left-overlay"></div>
     <div class="click-right-overlay"></div>
     <div class="artist-profile-image">
-        <% if(artist.images.length>0){ %>
+        <% if(artist.img){ %>
             <div 
                 class="image-container"
                 style=" background:
@@ -14,7 +14,7 @@
                         rgba(0, 0, 0, 0.45), 
                         rgba(0, 0, 0, 0.45)
                         ),
-                        url(<%=artist.images[0].url%>);
+                        url(<%=artist.img%>);
                         background-size: cover;
                 "
             >

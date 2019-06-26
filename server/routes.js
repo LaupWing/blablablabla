@@ -51,7 +51,9 @@ router.get('/index', (req, res)=>{
                 const result        = await ourDB.nameQuery(value)
                 const searchSpotify = await spotifyApi.search(result.name,acces_token)
                 const img           = searchSpotify.artists.items[0].images[0].url
+                const spotifyId     = searchSpotify.artists.items[0].id
                 result.img          = img
+                result.spotifyId    = spotifyId
                 socket.emit('sending artistinfo', {
                     result,
                     foundSomething: true
@@ -135,15 +137,34 @@ router.get('/artist/:id', async(req,res)=>{
     const id          = req.params.id
     const acces_token = req.session.acces_token
     
-    const artist     = await spotifyApi.artist(id, acces_token)
-    const related    = await spotifyApi.related(id, acces_token)
-    const topTracks  = await spotifyApi.topTracks(id, acces_token)
-    artistName = artist.name
-    res.render('partials/artist',{
-        artist,
-        related,
-        topTracks
-    })
+    const list    = await ourDB.list()
+    const spotify = list
+        .map(item=>item.name)
+        .map(name=>{
+            return spotifyApi.search(name,acces_token)
+        })
+    const response = await Promise.all(spotify)
+    // console.log(response)
+    const images  = response
+        .map(artists=>artists.artists.items[0].images[0].url)
+
+    const related = list.map((a,index)=>{
+        let artist = a
+        artist.img = images[index]
+        return artist
+    })   
+    console.log(related)
+
+    
+    // const artist     = await spotifyApi.artist(id, acces_token)
+    
+    // const topTracks  = await spotifyApi.topTracks(id, acces_token)
+    // artistName = artist.name
+    // res.render('partials/artist',{
+    //     artist,
+    //     related,
+    //     topTracks
+    // })
 })
 
 router.get('/feed', async (req,res)=>{
