@@ -5,17 +5,40 @@ let prevState = []
 socket.on('sending artistinfo', (data)=>searchPage.renderSearchResults(data))
 socket.on('change artistpage', (obj)=>renderArtistPage(obj))
 socket.on('followers info', (list)=>renderFollowingList(list))
+socket.on('homepage feed', (feeds)=>console.log(feeds))
 
 const init = {
     consoleStyling: 'background: #222; color: #bada55',
     firstEnter: ()=>{
         init.addingEventsToNavLinks()
+        navigation.navState()
+        if(document.querySelector('section#homeFeed')){
+            console.log('%c requesting homefeed', init.consoleStyling)
+            socket.emit('requesting homefeed')
+            homePage.requestHomeFeed()
+        }
     },
     addingEventsToNavLinks: ()=> {
         console.log('%c Adding navigation click events', init.consoleStyling)
         const links = Array.from(document.querySelectorAll('nav#nav a'))
-        links.push(document.querySelector('.addNew a'))
+        if(document.querySelector('.addNew a')){
+            links.push(document.querySelector('.addNew a'))
+        }
+        if(document.querySelectorAll('ul.list a')){
+            navigation.events(document.querySelectorAll('ul.list a'))    
+        }
         navigation.events(links)
+    }
+}
+
+const homePage ={
+    requestHomeFeed: async ()=>{
+        const homefeed = await fetch('http://localhost:3001/homefeed')
+        const html     = await homefeed.text()
+        const container = document.querySelector('section#homeFeed')
+        removeChilds(container)
+        container.insertAdjacentHTML('beforeend', html)
+        feed.iframeActivate()
     }
 }
 
@@ -39,7 +62,16 @@ const states = {
 const navigation = {
     consoleStyling: 'color: orange',
     navState: ()=>{
-
+        const navItems = document.querySelectorAll('.mainNav-item a')
+        navItems.forEach(item=>{
+            item.addEventListener('click', function(){
+                document.querySelector('main').classList.remove('artist-page')
+                navItems.forEach(item=>item.classList.remove('active'))
+                this.classList.add('active')
+            })
+        })
+        if(navItems[0]===undefined) return
+        navItems[0].classList.add('active')
     },
     events: (links)=>{
         console.log('%c Adding events to links or link', navigation.consoleStyling)
@@ -204,12 +236,23 @@ const artistPage = {
         navigation.events(document.querySelectorAll('li.related-item a'))
         const zekkieid = document.querySelector('header.artist-header').dataset.zekkieid
         feed.requestingFeed(zekkieid)
-        document.querySelector('a.btn.btn-follow').addEventListener('click', artistPage.follow) 
+        artistPage.checkFollowing()
     },
     renderPosts: (posts)=>{
         const feed = document.querySelector('section#feed')
         removeChilds(feed)
         feed.insertAdjacentHTML('beforeend', posts)
+    },
+    followEvent: ()=>{
+        const btn = document.querySelector('a.btn.btn-follow')
+        if(btn.classList.contains('following')){
+            btn.removeEventListener('click', artistPage.follow) 
+            btn.addEventListener('click', artistPage.unfollow) 
+        }else{
+            btn.removeEventListener('click', artistPage.unfollow) 
+            btn.addEventListener('click', artistPage.follow)
+        }
+
     },
     follow: ()=>{
         event.preventDefault()
@@ -218,21 +261,41 @@ const artistPage = {
         xhr.open("POST",`http://185.57.8.62:3000/api/v1/user/follow?userId=1&artistId=${zekkieid}`);
         xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         xhr.send();
+        const btn = document.querySelector('a.btn.btn-follow')
+        btn.textContent = 'unfollow'
+        btn.classList.add('following')
+        artistPage.followEvent()
+        socket.emit('update list')
     },
     unfollow: ()=>{
+        const btn = document.querySelector('a.btn.btn-follow')
+        const xhr = new XMLHttpRequest();
+        const zekkieid = document.querySelector('header.artist-header').dataset.zekkieid
 
+        const params = `userId=1&artistId=${zekkieid}`
+        xhr.open("DELETE", "http://185.57.8.62:3000/api/v1/user/unfollow");
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        xhr.send(params);
+
+        btn.textContent = 'follow'
+        btn.classList.remove('following')
+        artistPage.followEvent()
+        socket.emit('update list')
     },
     checkFollowing: async ()=>{
         const res  = await fetch('http://185.57.8.62:3000/api/v1/user?id=1')
         const user = await res.json()
+        console.log(user)
         const id   = document.querySelector('header.artist-header').dataset.zekkieid
-        user.following.forEach(fw=>{
-            if(fw.artistId === id){
-                const btn = document.querySelector('a.btn.btn-follow')
-                btn.textContent = unfollow
+        const btn = document.querySelector('a.btn.btn-follow')
+        for(let fw of user.following){
+            console.log(fw.id,id)
+            if(Number(fw.id) === Number(id)){
+                btn.textContent = 'unfollow'
                 btn.classList.add('following')
             }
-        })
+        }
+        artistPage.followEvent()
     }
 }
 

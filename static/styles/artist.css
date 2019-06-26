@@ -292,6 +292,7 @@ a.btn.btn-follow{
   text-transform: uppercase;
   font-size: 12px;
   border-width: 2px;
+  transition: .5s;
 }
 a.btn.btn-follow.following{
   color: white;

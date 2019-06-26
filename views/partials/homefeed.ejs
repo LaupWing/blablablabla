@@ -1,0 +1,48 @@
+<% artists.forEach(artist=>{%>
+    <% if(artist.instagram){ %>
+        <% artist.instagram.forEach((i)=>{ %>
+            <div class="iframe-wrapper">
+                <header class="iframe">
+                    <img src="/img/instagram.png" alt="">
+                </header>
+                <%-i.html%>
+            </div>
+        <% }) %>
+    <% } %>
+    <% if(artist.soundcloud){ %>
+        <% artist.soundcloud.forEach((url, i)=>{ %>
+            <div data-url='<%=url%>' class="putTheWidgetHere iframe-wrapper" id="id<%=i%>">
+                <header class="iframe">
+                    <img src="/img/soundcloud.png" alt="">
+                </header>
+            </div>
+        <% }) %>
+    <% } %>
+    <% if (artist.youtube){ %>
+        <% artist.youtube.forEach((yt)=>{ %>
+            <div class="iframe-wrapper"
+                data-date="<%= yt.post_date %>" 
+            >
+                <header class="iframe">
+                    <img src="/img/youtube.png" alt="">
+                </header>
+                <iframe
+                    src="https://www.youtube.com/embed/<%=yt.video_id%>">
+                </iframe>
+            </div>
+        <% }) %>
+    <% } %>
+    
+    <% if (artist.twitter){ %>
+        <% artist.twitter.forEach((tw)=>{ %>
+            <div class="iframe-wrapper"
+                data-date="<%= tw.post_date %>"
+            >
+                <header class="iframe">
+                    Twitter
+                </header>
+                <%-tw.html%>
+            </div>
+        <% }) %>
+    <% } %>
+<%}) %>

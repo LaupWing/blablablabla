@@ -34,7 +34,8 @@ const ourDB ={
         return getData(url)
     },
     userInfo: ()=>{
-        
+        const url = 'http://185.57.8.62:3000/api/v1/user?id=1'
+        return getData(url)   
     }
 
 }

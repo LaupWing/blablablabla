@@ -34,9 +34,10 @@ async function getFollowerInfo(list){
     return reformList 
 }
 
-router.get('/index', (req, res)=>{
+router.get('/index', async (req, res)=>{
     acces_token = req.session.acces_token
     const io = req.app.get('socketio')
+    req.session.user = await ourDB.userInfo()
     io.on('connection', socket=>{
         socket.on('sending searchvalue',async (value)=>{
             try{
@@ -57,19 +58,52 @@ router.get('/index', (req, res)=>{
                 })
             }
         })
+        socket.on('requesting homefeed', async ()=>{
+            const user = req.session.user
+            const feeds = user.following.map(async (fw)=>{
+                const artistFeed = await ourDB.detail(fw.id)
+                const soundcloud = await soundCloud(artistFeed.name)
+                const posts ={
+                    twitter: artistFeed.tweets,
+                    instagram: artistFeed.instagramPosts,
+                    events: artistFeed.events,
+                    youtube: artistFeed['youtube-videos'],
+                    soundcloud
+                }
+                return posts
+            })
+            const homefeed = await Promise.all(feeds)
+            socket.emit('homepage feed', homefeed)
+        })
+        socket.on('update list', async ()=>{
+            const user = await ourDB.userInfo()
+            req.session.user = user
+            console.log('updated list')
+            console.log(req.session.user)
+        })
     })
-    res.render('index',{
-        currentPage: 'partials/following.ejs',
-        script: true
-    })
+    if(req.session.user.following.length>0){
+        const list = await getCorrespondingImg(req.session.user.following)
+        res.render('index',{
+            currentPage: 'partials/followingList.ejs',
+            list,
+            script: true
+        })
+    }else{
+        res.render('index',{
+            currentPage: 'partials/following.ejs',
+            script: true
+        })
+    }
 })
 
 router.get('/home', async (req, res)=>{
-    if(following !== undefined){
-        const list = following
-        res.render('partials/followingList', {list})
+    if(req.session.user.following.length>0){
+        const list = await getCorrespondingImg(req.session.user.following)
+        console.log(list)
+        res.render('partials/followingList',{list})
     }else{
-        console.log('list is niet aanwezig')
+        console.log('no folowers')
         res.render('partials/following')
     }
 })
@@ -78,10 +112,22 @@ router.get('/search', (req, res)=>{
     res.render('partials/search.ejs')
 })
 
-router.get('/testingdata', async (req, res)=>{
-    const data = await wikipedia('anouk')
-    console.log(data)
-    res.send(data)
+router.get('/homefeed', async (req, res)=>{
+    const user = req.session.user
+    const feeds = user.following.map(async (fw)=>{
+        const artistFeed = await ourDB.detail(fw.id)
+        const soundcloud = await soundCloud(artistFeed.name)
+        const posts ={
+            twitter: artistFeed.tweets,
+            instagram: artistFeed.instagramPosts,
+            events: artistFeed.events,
+            youtube: artistFeed['youtube-videos'],
+            soundcloud
+        }
+        return posts
+    })
+    const artists = await Promise.all(feeds)
+    res.render('partials/homefeed', {artists})
 })
 
 router.get('/artist/:id', async(req,res)=>{
@@ -93,24 +139,7 @@ router.get('/artist/:id', async(req,res)=>{
 
     const list    = await ourDB.list()
     
-    // Getting corresponding img from 
-    const spotify = list
-        .map(item=>item.name)
-        .map(name=>{
-            return spotifyApi.search(name,acces_token)
-        })
-    const response   = await Promise.all(spotify)
-    const images     = response
-        .map(artists=>artists.artists.items[0].images[0].url)
-    const spotifyID  = response
-        .map(artists=>artists.artists.items[0].id)
-    const related = list.map((a,index)=>{
-        let artist       = a
-        artist.img       = images[index]
-        artist.spotifyId = spotifyID[index]
-        return artist
-    })   
-    
+    const related    = await getCorrespondingImg(list)
     const artist     = await spotifyApi.artist(spotifyId, acces_token)
     const topTracks  = await spotifyApi.topTracks(spotifyId, acces_token)
 
@@ -121,37 +150,6 @@ router.get('/artist/:id', async(req,res)=>{
         zekkieId
     })
 })
-
-// router.get('/feed', async (req,res)=>{
-//     const insta      = await instagram(artistName)
-//     const soundcloud = await soundCloud(artistName)
-//     const yt         = new Youtube()
-//     yt.setKey("AIzaSyBeiiNR-feYHP2uC90LKZWVFlGx7IQ9ztE")
-//     yt.search(artistName,10,(err,response) => {
-//         try{
-//             const youtube = response.items
-//             .filter(i=>i.id.videoId)
-//             .map(i=>{
-//                 return {
-//                     id:i.id.videoId,
-//                     date: i.snippet.publishedAt
-//                 }
-//             })
-//             res.render('partials/artist-partials/feeds',{
-//                 youtube,
-//                 insta,
-//                 soundcloud
-//             })
-//         }catch{
-//             console.log(err)
-//             res.render('partials/artist-partials/feeds',{
-//                 insta,
-//                 soundcloud,
-//                 youtube: null
-//             })
-//         }
-//     })
-// })
 
 router.post('/feed', async(req,res)=>{
     const id         = req.body.id
@@ -174,6 +172,27 @@ router.post('/testing', async(req,res)=>{
     console.log(req.body)
     res.send('index')
 })
+
+async function getCorrespondingImg(list){
+    // Getting corresponding img from 
+    const spotify = list
+        .map(item=>item.name)
+        .map(name=>{
+            return spotifyApi.search(name,acces_token)
+        })
+    const response   = await Promise.all(spotify)
+    const images     = response
+        .map(artists=>artists.artists.items[0].images[0].url)
+    const spotifyID  = response
+        .map(artists=>artists.artists.items[0].id)
+    const related = list.map((a,index)=>{
+        let artist       = a
+        artist.img       = images[index]
+        artist.spotifyId = spotifyID[index]
+        return artist
+    })
+    return related
+}
 
 
 module.exports = router
