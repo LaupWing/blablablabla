@@ -24,8 +24,8 @@ const states = {
     prevState: [],
     getPrevState: ()=>{
         const container = document.querySelector('main')
-        let state = states.prevState[prevState.length-1]
-        states.prevState = states.prevState.filter(state=>state!==null && state!==states.prevState[prevState.length-1])
+        let state = states.prevState[states.prevState.length-1]
+        states.prevState = states.prevState.filter(state=>state!==null && state!==states.prevState[states.prevState.length-1])
         container.classList.add('fadeAway')
         if(state ==='http://localhost:3001/search') {
             container.classList.remove('artist-page')
@@ -51,7 +51,7 @@ const searchPage= {
             const img = item.img ? item.img : '/img/placeholder.png' 
             const newElement =`
             <div data-id="${item.id}" class="result-item">
-                <a class="result-link" href="/artist/${item.spotifyId}">
+                <a class="result-link" href="/artist/${item.spotifyId}&${item.id}">
                 <img class="result-img" src="${img}" alt="">
                 <p class="result-name">${item.name}</p>
                 </a>
@@ -187,8 +187,7 @@ const fetchHTML = {
         // If the class artist-header excist that means that we are on the artistpage
         if(document.querySelector('header.artist-header')!==null){
             document.querySelector('main').classList.add("artist-page")
-            // document.querySelector('.btn.btn-follow').addEventListener('click', followingArtist)
-            document.querySelector('i.fas.fa-chevron-left').addEventListener('click', getPrevState)
+            document.querySelector('i.fas.fa-chevron-left').addEventListener('click', states.getPrevState)
             addingEvents.links(document.querySelectorAll('li.related-item a'))
             // requestingPosts()
         }

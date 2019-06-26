@@ -1,12 +1,13 @@
 <header 
     class="artist-header"
-    data-id="<%=artist.id%>"
+    data-spotifyId="<%=artist.id%>"
+    data-zekkieId="<%=zekkieId%>"
 >
     <i class="fas fa-chevron-left"></i>
     <div class="click-left-overlay"></div>
     <div class="click-right-overlay"></div>
     <div class="artist-profile-image">
-        <% if(artist.img){ %>
+        <% if(artist.images.length>0){ %>
             <div 
                 class="image-container"
                 style=" background:
@@ -14,7 +15,7 @@
                         rgba(0, 0, 0, 0.45), 
                         rgba(0, 0, 0, 0.45)
                         ),
-                        url(<%=artist.img%>);
+                        url(<%=artist.images[0].url%>);
                         background-size: cover;
                 "
             >

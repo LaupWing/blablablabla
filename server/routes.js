@@ -85,9 +85,12 @@ router.get('/testingdata', async (req, res)=>{
 })
 
 router.get('/artist/:id', async(req,res)=>{
-    const id          = req.params.id
+    const ids         = req.params.id
     const acces_token = req.session.acces_token
     
+    const spotifyId   = ids.split('&')[0]
+    const zekkieId    = ids.split('&')[1]
+
     const list    = await ourDB.list()
     
     // Getting corresponding img from 
@@ -96,22 +99,26 @@ router.get('/artist/:id', async(req,res)=>{
         .map(name=>{
             return spotifyApi.search(name,acces_token)
         })
-    const response = await Promise.all(spotify)
-    const images  = response
+    const response   = await Promise.all(spotify)
+    const images     = response
         .map(artists=>artists.artists.items[0].images[0].url)
+    const spotifyID  = response
+        .map(artists=>artists.artists.items[0].id)
     const related = list.map((a,index)=>{
-        let artist = a
-        artist.img = images[index]
+        let artist       = a
+        artist.img       = images[index]
+        artist.spotifyId = spotifyID[index]
         return artist
     })   
     
-    const artist     = await spotifyApi.artist(id, acces_token)
-    const topTracks  = await spotifyApi.topTracks(id, acces_token)
+    const artist     = await spotifyApi.artist(spotifyId, acces_token)
+    const topTracks  = await spotifyApi.topTracks(spotifyId, acces_token)
 
     res.render('partials/artist',{
         artist,
         related,
-        topTracks
+        topTracks,
+        zekkieId
     })
 })
 
