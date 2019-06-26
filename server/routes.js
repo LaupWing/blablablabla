@@ -34,14 +34,6 @@ async function getFollowerInfo(list){
     return reformList 
 }
 
-// function followedFirst(a,b){
-//     for(let f of following){
-//         if(a.id === f.id)      return 1
-//         else if(b.id === f.id) return 1
-//         else                   return -1
-//     }
-// }
-
 router.get('/index', (req, res)=>{
     acces_token = req.session.acces_token
     const io = req.app.get('socketio')
@@ -63,47 +55,6 @@ router.get('/index', (req, res)=>{
                     result          : 'Found nothing!',
                     foundSomething  : false
                 })
-            }
-        })
-        socket.on('getArtistInfo', async (id)=>{
-            const acces_token = req.session.acces_token
-            const artist      = await spotifyApi.artist(id, acces_token)
-            const related     = await spotifyApi.related(id, acces_token)
-            const topTracks   = await spotifyApi.topTracks(id, acces_token)
-            console.log(artist)
-            const artistClean  = {
-                image:  artist.images[0].url,
-                id:     artist.id,
-                name:   artist.name
-            }
-            const relatedClean = related.artists.map(artist=>{
-                return{
-                    image:  artist.images[0].url,
-                    id:     artist.id,
-                    name:   artist.name
-                }
-            })
-            socket.emit('change artistpage',{
-                artistClean,
-                relatedClean,
-                topTracks
-            })
-        })
-        socket.on('list', async list=>{
-            try{
-                const results = await getFollowerInfo(list)
-                following = results
-                socket.emit('followers info', results)
-            }catch{
-                console.log('something went wrong with the following list')
-            }
-        })
-        socket.on('register list', async list=>{
-            try{
-                const results = await getFollowerInfo(list)
-                following = results
-            }catch{
-                console.log('something went wrong with the following list')
             }
         })
     })
@@ -138,33 +89,30 @@ router.get('/artist/:id', async(req,res)=>{
     const acces_token = req.session.acces_token
     
     const list    = await ourDB.list()
+    
+    // Getting corresponding img from 
     const spotify = list
         .map(item=>item.name)
         .map(name=>{
             return spotifyApi.search(name,acces_token)
         })
     const response = await Promise.all(spotify)
-    // console.log(response)
     const images  = response
         .map(artists=>artists.artists.items[0].images[0].url)
-
     const related = list.map((a,index)=>{
         let artist = a
         artist.img = images[index]
         return artist
     })   
-    console.log(related)
+    
+    const artist     = await spotifyApi.artist(id, acces_token)
+    const topTracks  = await spotifyApi.topTracks(id, acces_token)
 
-    
-    // const artist     = await spotifyApi.artist(id, acces_token)
-    
-    // const topTracks  = await spotifyApi.topTracks(id, acces_token)
-    // artistName = artist.name
-    // res.render('partials/artist',{
-    //     artist,
-    //     related,
-    //     topTracks
-    // })
+    res.render('partials/artist',{
+        artist,
+        related,
+        topTracks
+    })
 })
 
 router.get('/feed', async (req,res)=>{
