@@ -44,9 +44,17 @@ router.get('/index', async (req, res)=>{
                 const spotifyId     = searchSpotify.artists.items[0].id
                 result.img          = img
                 result.spotifyId    = spotifyId
+
+                let followed        = 'noborder'
+                for(fw of following){
+                    if(fw.id===result.id){
+                        followed = 'border'
+                    }
+                }
                 socket.emit('sending artistinfo', {
                     result,
-                    foundSomething: true
+                    foundSomething: true,
+                    followed
                 })            
             }catch{
                 socket.emit('sending artistinfo', {

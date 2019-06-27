@@ -74,6 +74,9 @@ h3.nothing{
     max-height: 0;
     animation: heightAnim 2s forwards;
 }
+.result-img.border{
+    border: 3px solid #7f6bff;
+}
 
 @keyframes heightAnim{
     to{

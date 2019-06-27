@@ -88,15 +88,16 @@ const searchPage= {
     consoleStyling: 'color: white; background: #171717',
     renderSearchResults:(result)=>{
         console.log("%c searchPage- rendering search results", searchPage.consoleStyling)
+        console.log(result.followed)
         const container = document.querySelector('section.search-main')
         removeChilds(container)
         const item = result.result
         if(result.foundSomething){
-            const img = item.img ? item.img : '/img/placeholder.png' 
+            const img = item.img ? item.img : '/img/placeholder.png'
             const newElement =`
             <div data-id="${item.id}" class="result-item">
                 <a class="result-link" href="/artist/${item.spotifyId}&${item.id}">
-                <img class="result-img" src="${img}" alt="">
+                <img class="result-img ${result.followed}" src="${img}" alt="">
                 <p class="result-name">${item.name}</p>
                 </a>
             </div>
