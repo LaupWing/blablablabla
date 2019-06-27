@@ -4,6 +4,8 @@
     data-zekkieId="<%=zekkieId%>"
 >
     <i class="fas fa-chevron-left"></i>
+    <div class="click-left-overlay"></div>
+    <div class="click-right-overlay"></div>
     <div class="artist-profile-image">
         <% if(artist.images.length>0){ %>
             <div 
@@ -32,18 +34,18 @@
             >
             </div>
         <% }%>
-
-        <div class="siema">
-            <div class="header-section info">
-                <h1 class="artist-title"><%= artist.name %></h1>
-                <a class="btn btn-follow" href="#">follow</a>
-            </div>
-            <div class="header-section bio">
-                <p><%=wikidata%></p>
-            </div>
+        <div class="header-section info visible">
+            <h1 class="artist-title"><%= artist.name %></h1>
+            <a class="btn btn-follow" href="#">follow</a>
+        </div>
+        <div class="header-section bio">
+            <p><%=wikidata%></p>
+        </div>
+        <div class="header-section topTracks">
+            topTracks
         </div>
         <nav class="header">
-            <i class="fas fa-circle"></i>
+            <i class="fas fa-circle visible"></i>
             <i class="fas fa-circle"></i>
             <i class="fas fa-circle"></i>
         </nav>

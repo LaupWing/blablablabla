@@ -82,7 +82,6 @@
     align-items: center;
     flex-direction: column;
     bottom: 15%;
-    z-index: 10000000000000000000000;
   }
   .artist-header .bottom-shadow{
     background-image: linear-gradient(transparent, var(--main-bg-color));
@@ -96,7 +95,19 @@
     text-align: center;
     color: var(--main-font-color);
   }
-  
+
+  .header-section.info,
+  .header-section.bio{
+    opacity: 0;
+    z-index: 1;
+  }
+.header-section.bio.visible,
+.header-section.info.visible{
+  opacity: 1!important;
+  z-index: 1000000000!important;
+}
+
+
   .artist-title {
     font-size: 3.5rem;
     text-align: center;
@@ -129,11 +140,11 @@
     position: absolute;
     top:0;
     left:0;
-    z-index: 2000000;
+    z-index: 10000000000000000000001;
   }
   .click-right-overlay{
     width: 20%;
-    z-index: 2000000;
+    z-index: 10000000000000000000001;
     height: 100%;
     position: absolute;
     top:0;

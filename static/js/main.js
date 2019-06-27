@@ -242,7 +242,35 @@ const artistPage = {
         navigation.events(document.querySelectorAll('li.related-item a'))
         const zekkieid = document.querySelector('header.artist-header').dataset.zekkieid
         feed.requestingFeed(zekkieid)
+        document.querySelector('.click-left-overlay').addEventListener('click', artistPage.headerEvents.minus)
+        document.querySelector('.click-right-overlay').addEventListener('click', artistPage.headerEvents.plus)
         artistPage.checkFollowing()
+    },
+    headerEvents: {
+        index: 0,
+        minus: ()=>{
+            const headers = document.querySelectorAll('.header-section')
+            const i = document.querySelectorAll('nav.header i')
+            console.log(artistPage.headerEvents.index)
+            if(artistPage.headerEvents.index ===0) return
+            artistPage.headerEvents.index--
+            headers.forEach(x=>x.classList.remove('visible'))
+            headers[artistPage.headerEvents.index].classList.add('visible')
+            i.forEach(x=>x.classList.remove('visible'))
+            i[artistPage.headerEvents.index].classList.add('visible')
+        },
+        plus: ()=>{
+            console.log('right overlay transition', artistPage.headerEvents.index)
+            const headers = document.querySelectorAll('.header-section')
+            const i = document.querySelectorAll('nav.header i')
+            console.log(artistPage.headerEvents.index)
+            if(artistPage.headerEvents.index ===2) return
+            artistPage.headerEvents.index++
+            headers.forEach(x=>x.classList.remove('visible'))
+            headers[artistPage.headerEvents.index].classList.add('visible')
+            i.forEach(x=>x.classList.remove('visible'))
+            i[artistPage.headerEvents.index].classList.add('visible')
+        }
     },
     renderPosts: (posts)=>{
         const feed = document.querySelector('section#feed')
@@ -338,6 +366,7 @@ const feed = {
         twttr.widgets.load()
     }
 }
+
 
 
 
