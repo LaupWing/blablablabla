@@ -42,7 +42,14 @@
             <p><%=wikidata%></p>
         </div>
         <div class="header-section topTracks">
-            topTracks
+            <% tracks.forEach((tr,i)=>{%>
+                <div class="track">
+                    <p><%=i%></p>
+                    <p><%=tr.song%></p>
+                    <i class="fas fa-play"></i>
+                    <audio src="<%=tr.prUrl%>"></audio>
+                </div>
+            <% }) %>
         </div>
         <nav class="header">
             <i class="fas fa-circle visible"></i>

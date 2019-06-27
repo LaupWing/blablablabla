@@ -148,11 +148,19 @@ router.get('/artist/:id', async(req,res)=>{
     const data         = await ourDB.detail(zekkieId)
     const wikidata     = data.wikiDescription.wiki_description
     const topTracks  = await spotifyApi.topTracks(spotifyId, acces_token)
-    console.log(wikidata)
+    const tracks = topTracks.tracks
+        .slice(0,5)
+        .map(x=>{
+            return{
+                song: x.name,
+                prUrl: x.preview_url
+            }
+        })
+    console.log(tracks)
     res.render('partials/artist',{
         artist,
         related,
-        topTracks,
+        tracks,
         zekkieId,
         wikidata
     })

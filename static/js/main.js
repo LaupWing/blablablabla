@@ -245,6 +245,9 @@ const artistPage = {
         document.querySelector('.click-left-overlay').addEventListener('click', artistPage.headerEvents.minus)
         document.querySelector('.click-right-overlay').addEventListener('click', artistPage.headerEvents.plus)
         artistPage.checkFollowing()
+        document.querySelectorAll('.track i').forEach(x=>{
+            x.addEventListener('click', artistPage.headerEvents.music)
+        })
     },
     headerEvents: {
         index: 0,
@@ -270,6 +273,11 @@ const artistPage = {
             headers[artistPage.headerEvents.index].classList.add('visible')
             i.forEach(x=>x.classList.remove('visible'))
             i[artistPage.headerEvents.index].classList.add('visible')
+        },
+        music: function(){
+            const all = document.querySelectorAll('.header-section.topTracks .track')
+            all.forEach(x=>x.querySelector('audio').pause())
+            this.parentElement.querySelector('audio').play()   
         }
     },
     renderPosts: (posts)=>{
