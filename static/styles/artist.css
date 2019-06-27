@@ -223,6 +223,9 @@
     margin-right: .5rem;
     overflow: hidden;
 }
+.related-item-img.border{
+  border: 4px solid #7f6bff;
+}
 .related-item-img img{
     width: 100%;
 }
@@ -270,6 +273,9 @@ iframe{
   background: white;
   padding: 10px;
   padding-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .loading{
@@ -299,4 +305,21 @@ a.btn.btn-follow.following{
   text-transform: uppercase;
   font-size: 12px;
   border: solid 2px #7F6BFF;
+}
+
+header.iframe .artist{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header.iframe .artist img{
+  width: 50px;
+  border-radius: 50%;
+}
+header.iframe .artist p{
+  font-weight: bold;
+  margin-left: 10px;
+}
+header.iframe img{
+  width: 30px;
 }

@@ -105,12 +105,16 @@ router.get('/homefeed', async (req, res)=>{
     const feeds = following.map(async (fw)=>{
         const artistFeed = await ourDB.detail(fw.id)
         const soundcloud = await soundCloud(artistFeed.name)
+        const spotify    = await spotifyApi.search(artistFeed.name, acces_token)
+        const img        = spotify.artists.items[0].images[0].url
         const posts ={
             twitter: artistFeed.tweets,
             instagram: artistFeed.instagramPosts,
             events: artistFeed.events,
             youtube: artistFeed['youtube-videos'],
-            soundcloud
+            soundcloud,
+            name: artistFeed.name,
+            img
         }
         return posts
     })
@@ -128,9 +132,21 @@ router.get('/artist/:id', async(req,res)=>{
     const list    = await ourDB.list()
     
     const related    = await getCorrespondingImg(list)
+    const related2   = related
+        .map(r=>{
+            let obj = r
+            for(f of following){
+                if(f.id === r.id){
+                    obj.border = 'border'
+                    return obj
+                }
+            }
+            obj.border = 'noborder'
+            return obj
+        })
     const artist     = await spotifyApi.artist(spotifyId, acces_token)
     const topTracks  = await spotifyApi.topTracks(spotifyId, acces_token)
-
+    
     res.render('partials/artist',{
         artist,
         related,

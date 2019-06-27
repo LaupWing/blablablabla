@@ -2,11 +2,11 @@
     <% related.forEach((artist)=> { %>
       <li class="related-item"><a href="/artist/<%= artist.spotifyId %>&<%= artist.id %>">
         <% if(artist.img){ %>
-            <div class="related-item-img">
+            <div class="related-item-img <%= artist.border %>">
                 <img src="<%= artist.img %>">
             </div>
         <% } else{ %>
-            <div class="related-item-img">
+            <div class="related-item-img <%= artist.border %>">
                 <img src="/img/placeholder.png">
             </div>	
         <% } %>

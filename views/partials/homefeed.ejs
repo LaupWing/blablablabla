@@ -3,6 +3,10 @@
         <% artist.instagram.forEach((i)=>{ %>
             <div class="iframe-wrapper">
                 <header class="iframe">
+                    <div class="artist">
+                        <img src="<%=artist.img%>" alt="">
+                        <p><%=artist.name%></p>
+                    </div>
                     <img src="/img/instagram.png" alt="">
                 </header>
                 <%-i.html%>
@@ -11,10 +15,16 @@
     <% } %>
     <% if(artist.soundcloud){ %>
         <% artist.soundcloud.forEach((url, i)=>{ %>
-            <div data-url='<%=url%>' class="putTheWidgetHere iframe-wrapper" id="id<%=i%>">
+            <div class="iframe-wrapper">
                 <header class="iframe">
+                    <div class="artist">
+                        <img src="<%=artist.img%>" alt="">
+                            <p><%=artist.name%></p>
+                    </div>
                     <img src="/img/soundcloud.png" alt="">
                 </header>
+                <div data-url='<%=url%>' class="putTheWidgetHere souncloud-wrapper" id="id<%=i%>">
+                </div>
             </div>
         <% }) %>
     <% } %>
@@ -24,6 +34,10 @@
                 data-date="<%= yt.post_date %>" 
             >
                 <header class="iframe">
+                    <div class="artist">
+                        <img src="<%=artist.img%>" alt="">
+                        <p><%=artist.name%></p>
+                    </div>
                     <img src="/img/youtube.png" alt="">
                 </header>
                 <iframe
@@ -39,6 +53,10 @@
                 data-date="<%= tw.post_date %>"
             >
                 <header class="iframe">
+                    <div class="artist">
+                        <img src="<%=artist.img%>" alt="">
+                        <p><%=artist.name%></p>
+                    </div>
                     Twitter
                 </header>
                 <%-tw.html%>
