@@ -84,6 +84,7 @@ const soundCloud = async (name) =>{
 
 const wikipedia = async(name)=>{
     try{
+        console.log(name)
         const allLinks  = await musicBrainz.artistLinks(removeAllNonAlpha(name))
         const getLink = allLinks.filter(searchObj('wikipedia'))
         const hardCodedLink = `https://en.wikipedia.org/api/rest_v1/page/summary/${name}`

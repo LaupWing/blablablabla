@@ -13,7 +13,7 @@ const init = {
         navigation.navState()
         if(document.querySelector('section#homeFeed')){
             console.log('%c requesting homefeed', init.consoleStyling)
-            socket.emit('requesting homefeed')
+            navigation.events(document.querySelectorAll('ul.list a'))  
             homePage.requestHomeFeed()
         }
     },
@@ -222,6 +222,7 @@ const fetchHTML = {
             navigation.events(document.querySelectorAll('.addNew a'))
         }
         else if(document.querySelector('section#homeFeed')){
+            navigation.events(document.querySelectorAll('ul.list a'))
             homePage.requestHomeFeed()
         }
         else if(document.querySelector('.image-container-following')){
