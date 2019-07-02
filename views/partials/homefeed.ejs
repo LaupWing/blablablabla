@@ -31,7 +31,7 @@
     <% if (artist.youtube){ %>
         <% artist.youtube.forEach((yt)=>{ %>
             <div class="iframe-wrapper"
-                data-date="<%= yt.post_date %>" 
+                data-date="<%= yt.timestamp %>" 
             >
                 <header class="iframe">
                     <div class="artist">
@@ -50,7 +50,7 @@
     <% if (artist.twitter){ %>
         <% artist.twitter.forEach((tw)=>{ %>
             <div class="iframe-wrapper"
-                data-date="<%= tw.post_date %>"
+                data-date="<%= tw.timestamp %>"
             >
                 <header class="iframe">
                     <div class="artist">

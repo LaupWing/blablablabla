@@ -145,8 +145,8 @@ router.get('/artist/:id', async(req,res)=>{
             return obj
         })
     const artist     = await spotifyApi.artist(spotifyId, acces_token)
-    const data         = await ourDB.detail(zekkieId)
-    const wikidata     = data.wikiDescription.wiki_description
+    const data       = await ourDB.detail(zekkieId)
+    const wikidata   = data.wikiDescription.wiki_description
     const topTracks  = await spotifyApi.topTracks(spotifyId, acces_token)
     const tracks = topTracks.tracks
         .slice(0,5)
@@ -208,6 +208,5 @@ async function getCorrespondingImg(list){
     })
     return related
 }
-
 
 module.exports = router
